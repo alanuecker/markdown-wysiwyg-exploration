@@ -1,7 +1,7 @@
 import type { MetaFunction } from '@remix-run/node';
 import { ClientOnly } from 'remix-utils/client-only';
 
-import { MDXEditor } from '../components/editor.client';
+import { MDXEditor } from '~/components/editor.client';
 
 export const meta: MetaFunction = () => {
   return [

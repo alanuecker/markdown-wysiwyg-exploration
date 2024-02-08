@@ -4,3 +4,5 @@ node_modules
 /build
 /public/build
 .env
+/prisma/data/sqlite.db
+/prisma/data/splite.db-journal

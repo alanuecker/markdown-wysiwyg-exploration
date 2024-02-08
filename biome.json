@@ -8,7 +8,18 @@
 		"rules": {
 			"recommended": true
 		},
-		"ignore": ["build"]
+		"ignore": [
+			"build"
+		]
+	},
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true,
+		"defaultBranch": "main"
+	},
+	"formatter": {
+		"enabled": true
 	},
 	"javascript": {
 		"formatter": {

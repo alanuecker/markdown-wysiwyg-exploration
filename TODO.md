@@ -1,8 +1,10 @@
-- ~setup database to store MDX~
-- fetch and render MDX
+- ~~setup database to store MDX~~
+- ~~fetch and render MDX~~
   - create separate page
-- fetch MDX and pass to editor
-- save editor state and update MDX
+- ~~fetch MDX and pass to editor~~
+- ~~save editor state and update MDX~~
   - should trigger update on rendered output
 - add custom component that can render multiple code blocks as tabs
   - in editor and output
+- be able to write a mdx file that is uploaded to the db
+- make it possible to include multiple files in one page and build one output

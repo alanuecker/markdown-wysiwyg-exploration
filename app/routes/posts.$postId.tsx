@@ -1,6 +1,11 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from '@remix-run/node';
 import { Form, json, useLoaderData, useSubmit } from '@remix-run/react';
-import { useRef } from 'react';
+import { getMDXComponent } from 'mdx-bundler/client/index.js';
+import { useMemo, useRef } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 
 import { getPost, updatePost } from '../models/post.server';
@@ -59,59 +64,66 @@ export default function Index() {
   const editorRef = useRef<MDXEditorMethods>(null);
   const submit = useSubmit();
 
+  const Component = useMemo(
+    () => getMDXComponent(data.note.code),
+    [data.note.code],
+  );
+
   return (
-    <ClientOnly fallback={<p>Loading...</p>}>
-      {() =>
-        data.note.content && (
-          <div>
-            <Form
-              onSubmit={(event) => {
-                submit(
-                  { content: editorRef.current?.getMarkdown() || '' },
-                  { method: 'POST' },
-                );
-                event.preventDefault();
-              }}
-            >
-              <button type="submit">Save</button>
-            </Form>
-            <MDXEditor
-              ref={editorRef}
-              markdown={data.note.content}
-              plugins={[
-                toolbarPlugin({
-                  toolbarContents: () => <KitchenSinkToolbar />,
-                }),
-                listsPlugin(),
-                quotePlugin(),
-                headingsPlugin(),
-                linkPlugin(),
-                linkDialogPlugin(),
-                // eslint-disable-next-line @typescript-eslint/require-await
-                imagePlugin({
-                  imageUploadHandler: async () => '/sample-image.png',
-                }),
-                tablePlugin(),
-                thematicBreakPlugin(),
-                codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
-                codeMirrorPlugin({
-                  codeBlockLanguages: {
-                    js: 'JavaScript',
-                    css: 'CSS',
-                    txt: 'text',
-                    tsx: 'TypeScript',
-                  },
-                }),
-                diffSourcePlugin({
-                  viewMode: 'rich-text',
-                  diffMarkdown: data.note.content,
-                }),
-                markdownShortcutPlugin(),
-              ]}
-            />
-          </div>
-        )
-      }
-    </ClientOnly>
+    <>
+      <ClientOnly fallback={<p>Loading...</p>}>
+        {() =>
+          data.note.content && (
+            <div>
+              <Form
+                onSubmit={(event) => {
+                  submit(
+                    { content: editorRef.current?.getMarkdown() || '' },
+                    { method: 'POST' },
+                  );
+                  event.preventDefault();
+                }}
+              >
+                <button type="submit">Save</button>
+              </Form>
+              <MDXEditor
+                ref={editorRef}
+                markdown={data.note.content}
+                plugins={[
+                  toolbarPlugin({
+                    toolbarContents: () => <KitchenSinkToolbar />,
+                  }),
+                  listsPlugin(),
+                  quotePlugin(),
+                  headingsPlugin(),
+                  linkPlugin(),
+                  linkDialogPlugin(),
+                  imagePlugin({
+                    imageUploadHandler: async () => '/sample-image.png',
+                  }),
+                  tablePlugin(),
+                  thematicBreakPlugin(),
+                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
+                  codeMirrorPlugin({
+                    codeBlockLanguages: {
+                      js: 'JavaScript',
+                      css: 'CSS',
+                      txt: 'text',
+                      tsx: 'TypeScript',
+                    },
+                  }),
+                  diffSourcePlugin({
+                    viewMode: 'rich-text',
+                    diffMarkdown: data.note.content,
+                  }),
+                  markdownShortcutPlugin(),
+                ]}
+              />
+            </div>
+          )
+        }
+      </ClientOnly>
+      <Component />
+    </>
   );
 }

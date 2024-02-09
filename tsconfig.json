@@ -8,6 +8,7 @@
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "target": "ES2022",
+    "module": "ES2020",
     "strict": true,
     "allowJs": true,
     "skipLibCheck": true,

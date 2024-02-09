@@ -2,11 +2,16 @@ import type { Post } from '@prisma/client';
 
 import { prisma } from '../db.server';
 
-export function getPost({
-  id,
-}: Pick<Post, 'id'>) {
+export function getPost({ id }: Pick<Post, 'id'>) {
   return prisma.post.findFirst({
     select: { id: true, content: true, title: true },
+    where: { id },
+  });
+}
+
+export function updatePost({ id, content }: Pick<Post, 'id' | 'content'>) {
+  return prisma.post.update({
+    data: { content },
     where: { id },
   });
 }

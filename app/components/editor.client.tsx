@@ -16,4 +16,5 @@ export {
   diffSourcePlugin,
   markdownShortcutPlugin,
   type SandpackConfig,
+  type MDXEditorMethods,
 } from '@mdxeditor/editor';

@@ -3,7 +3,7 @@ import { json, redirect } from '@remix-run/node';
 import { Form, useActionData } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
 
-import { createPost } from '~/models/post.server';
+import { createPost } from '../models/post.server';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();

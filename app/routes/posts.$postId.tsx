@@ -3,6 +3,7 @@ import { Form, json, useLoaderData, useSubmit } from '@remix-run/react';
 import { useRef } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 
+import { getPost, updatePost } from '../models/post.server';
 import {
   KitchenSinkToolbar,
   MDXEditor,
@@ -20,8 +21,7 @@ import {
   tablePlugin,
   thematicBreakPlugin,
   toolbarPlugin,
-} from '~/components/editor.client';
-import { getPost, updatePost } from '~/models/post.server';
+} from '../utils/editor.client';
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
   const formData = await request.formData();

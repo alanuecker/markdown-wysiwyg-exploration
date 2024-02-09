@@ -1,6 +1,6 @@
 import type { Post } from '@prisma/client';
 
-import { prisma } from '../db.server';
+import { prisma } from '../utils/db.server';
 
 export function getPost({ id }: Pick<Post, 'id'>) {
   return prisma.post.findFirst({

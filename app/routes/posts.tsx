@@ -1,6 +1,5 @@
-import type { LoaderFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, Link, NavLink, Outlet, useLoaderData } from '@remix-run/react';
+import { Link, NavLink, Outlet, useLoaderData } from '@remix-run/react';
 
 import { getPostListItems } from '~/models/post.server';
 

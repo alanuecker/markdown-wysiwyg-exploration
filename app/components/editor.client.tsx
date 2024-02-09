@@ -1,2 +1,19 @@
 import '@mdxeditor/editor/style.css';
-export { MDXEditor } from '@mdxeditor/editor';
+export {
+  MDXEditor,
+  toolbarPlugin,
+  KitchenSinkToolbar,
+  listsPlugin,
+  quotePlugin,
+  headingsPlugin,
+  linkPlugin,
+  linkDialogPlugin,
+  imagePlugin,
+  tablePlugin,
+  thematicBreakPlugin,
+  codeBlockPlugin,
+  codeMirrorPlugin,
+  diffSourcePlugin,
+  markdownShortcutPlugin,
+  type SandpackConfig,
+} from '@mdxeditor/editor';

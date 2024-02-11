@@ -5,7 +5,7 @@ import type {
 } from '@remix-run/node';
 import { Form, json, useLoaderData, useSubmit } from '@remix-run/react';
 import { getMDXComponent } from 'mdx-bundler/client/index.js';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 
 import { getPost, updatePost } from '../models/post.server';
@@ -63,6 +63,15 @@ export default function Index() {
   const data = useLoaderData<typeof loader>();
   const editorRef = useRef<MDXEditorMethods>(null);
   const submit = useSubmit();
+
+  // update editor content from external source
+  // note: this could be restricted to data.note.id if we want to avoid
+  // overrinding the same content with a save action
+  useEffect(() => {
+    if (editorRef.current && data.note.content) {
+      editorRef.current.setMarkdown(data.note.content);
+    }
+  }, [data.note.content]);
 
   const Component = useMemo(
     () => getMDXComponent(data.note.code),

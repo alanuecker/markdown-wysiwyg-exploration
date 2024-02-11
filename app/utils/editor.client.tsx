@@ -15,6 +15,13 @@ export {
   codeMirrorPlugin,
   diffSourcePlugin,
   markdownShortcutPlugin,
+  GenericDirectiveEditor,
+  directivesPlugin,
+  NestedLexicalEditor,
+  usePublisher,
+  ButtonWithTooltip,
+  insertDirective$,
+  type DirectiveDescriptor,
   type SandpackConfig,
   type MDXEditorMethods,
 } from '@mdxeditor/editor';

@@ -10,14 +10,18 @@ import { ClientOnly } from 'remix-utils/client-only';
 
 import { getPost, updatePost } from '../models/post.server';
 import {
-  KitchenSinkToolbar,
+  ButtonWithTooltip,
+  DirectiveDescriptor,
   MDXEditor,
   MDXEditorMethods,
+  NestedLexicalEditor,
   codeBlockPlugin,
   codeMirrorPlugin,
   diffSourcePlugin,
+  directivesPlugin,
   headingsPlugin,
   imagePlugin,
+  insertDirective$,
   linkDialogPlugin,
   linkPlugin,
   listsPlugin,
@@ -26,6 +30,7 @@ import {
   tablePlugin,
   thematicBreakPlugin,
   toolbarPlugin,
+  usePublisher,
 } from '../utils/editor.client';
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
@@ -57,6 +62,52 @@ export const meta: MetaFunction = () => {
     { title: 'New Remix App' },
     { name: 'description', content: 'Welcome to Remix!' },
   ];
+};
+
+const DirectiveButton = () => {
+  // grab the insertDirective action (a.k.a. publisher) from the
+  // state management system of the directivesPlugin
+  const insertDirective = usePublisher(insertDirective$);
+
+  return (
+    <ButtonWithTooltip
+      title="Inset tabs"
+      onClick={() => {
+        insertDirective({
+          name: 'callout',
+          type: 'leafDirective',
+          attributes: {},
+          children: [],
+        } as LeafDirective);
+      }}
+    >
+      Tabs
+    </ButtonWithTooltip>
+  );
+};
+
+const CalloutDirectiveDescriptor: DirectiveDescriptor = {
+  name: 'callout',
+  testNode(node) {
+    return node.name === 'callout';
+  },
+  // set some attribute names to have the editor display a property editor popup.
+  attributes: [],
+  // used by the generic editor to determine whether or not to render a nested editor.
+  hasChildren: true,
+  Editor: (props) => {
+    return (
+      <div style={{ border: '1px solid red', padding: 8, margin: 8 }}>
+        <NestedLexicalEditor<ContainerDirective>
+          block
+          getContent={(node) => node.children}
+          getUpdatedMdastNode={(mdastNode, children: any) => {
+            return { ...mdastNode, children };
+          }}
+        />
+      </div>
+    );
+  },
 };
 
 export default function Index() {
@@ -100,7 +151,7 @@ export default function Index() {
                 markdown={data.note.content}
                 plugins={[
                   toolbarPlugin({
-                    toolbarContents: () => <KitchenSinkToolbar />,
+                    toolbarContents: () => <DirectiveButton />,
                   }),
                   listsPlugin(),
                   quotePlugin(),
@@ -126,6 +177,9 @@ export default function Index() {
                     diffMarkdown: data.note.content,
                   }),
                   markdownShortcutPlugin(),
+                  directivesPlugin({
+                    directiveDescriptors: [CalloutDirectiveDescriptor],
+                  }),
                 ]}
               />
             </div>

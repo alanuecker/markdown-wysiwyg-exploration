@@ -9,7 +9,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 
 import { getPost, updatePost } from '../models/post.server';
-import { Editor, type MDXEditorMethods } from '../utils/editor.client';
+import { Editor, type MDXEditorMethods } from '../components/Editor.client';
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
   const formData = await request.formData();

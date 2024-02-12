@@ -1,5 +1,4 @@
 import {
-  ButtonWithTooltip,
   type DirectiveDescriptor,
   MDXEditor,
   type MDXEditorMethods,
@@ -10,7 +9,6 @@ import {
   directivesPlugin,
   headingsPlugin,
   imagePlugin,
-  insertDirective$,
   linkDialogPlugin,
   linkPlugin,
   listsPlugin,
@@ -19,39 +17,17 @@ import {
   tablePlugin,
   thematicBreakPlugin,
   toolbarPlugin,
-  usePublisher,
 } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
-import { ContainerDirective, type LeafDirective } from 'mdast-util-directive';
+import { type ContainerDirective } from 'mdast-util-directive';
 import { forwardRef } from 'react';
+import { EditorToolbar } from './EditorToolbar.client';
 
 export { type MDXEditorMethods } from '@mdxeditor/editor';
 
 interface Props {
   markdown: string;
 }
-
-const DirectiveButton = () => {
-  // grab the insertDirective action (a.k.a. publisher) from the
-  // state management system of the directivesPlugin
-  const insertDirective = usePublisher(insertDirective$);
-
-  return (
-    <ButtonWithTooltip
-      title="Inset tabs"
-      onClick={() => {
-        insertDirective({
-          name: 'callout',
-          type: 'leafDirective',
-          attributes: {},
-          children: [],
-        } as LeafDirective);
-      }}
-    >
-      Tabs
-    </ButtonWithTooltip>
-  );
-};
 
 const CalloutDirectiveDescriptor: DirectiveDescriptor = {
   name: 'callout',
@@ -88,7 +64,7 @@ export const Editor = forwardRef<MDXEditorMethods, Props>(function Editor(
       markdown={markdown}
       plugins={[
         toolbarPlugin({
-          toolbarContents: () => <DirectiveButton />,
+          toolbarContents: () => <EditorToolbar />,
         }),
         listsPlugin(),
         quotePlugin(),

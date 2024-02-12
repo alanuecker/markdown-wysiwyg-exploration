@@ -9,29 +9,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 
 import { getPost, updatePost } from '../models/post.server';
-import {
-  ButtonWithTooltip,
-  DirectiveDescriptor,
-  MDXEditor,
-  MDXEditorMethods,
-  NestedLexicalEditor,
-  codeBlockPlugin,
-  codeMirrorPlugin,
-  diffSourcePlugin,
-  directivesPlugin,
-  headingsPlugin,
-  imagePlugin,
-  insertDirective$,
-  linkDialogPlugin,
-  linkPlugin,
-  listsPlugin,
-  markdownShortcutPlugin,
-  quotePlugin,
-  tablePlugin,
-  thematicBreakPlugin,
-  toolbarPlugin,
-  usePublisher,
-} from '../utils/editor.client';
+import { Editor, type MDXEditorMethods } from '../utils/editor.client';
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -62,52 +40,6 @@ export const meta: MetaFunction = () => {
     { title: 'New Remix App' },
     { name: 'description', content: 'Welcome to Remix!' },
   ];
-};
-
-const DirectiveButton = () => {
-  // grab the insertDirective action (a.k.a. publisher) from the
-  // state management system of the directivesPlugin
-  const insertDirective = usePublisher(insertDirective$);
-
-  return (
-    <ButtonWithTooltip
-      title="Inset tabs"
-      onClick={() => {
-        insertDirective({
-          name: 'callout',
-          type: 'leafDirective',
-          attributes: {},
-          children: [],
-        } as LeafDirective);
-      }}
-    >
-      Tabs
-    </ButtonWithTooltip>
-  );
-};
-
-const CalloutDirectiveDescriptor: DirectiveDescriptor = {
-  name: 'callout',
-  testNode(node) {
-    return node.name === 'callout';
-  },
-  // set some attribute names to have the editor display a property editor popup.
-  attributes: [],
-  // used by the generic editor to determine whether or not to render a nested editor.
-  hasChildren: true,
-  Editor: (props) => {
-    return (
-      <div style={{ border: '1px solid red', padding: 8, margin: 8 }}>
-        <NestedLexicalEditor<ContainerDirective>
-          block
-          getContent={(node) => node.children}
-          getUpdatedMdastNode={(mdastNode, children: any) => {
-            return { ...mdastNode, children };
-          }}
-        />
-      </div>
-    );
-  },
 };
 
 export default function Index() {
@@ -146,42 +78,7 @@ export default function Index() {
               >
                 <button type="submit">Save</button>
               </Form>
-              <MDXEditor
-                ref={editorRef}
-                markdown={data.note.content}
-                plugins={[
-                  toolbarPlugin({
-                    toolbarContents: () => <DirectiveButton />,
-                  }),
-                  listsPlugin(),
-                  quotePlugin(),
-                  headingsPlugin(),
-                  linkPlugin(),
-                  linkDialogPlugin(),
-                  imagePlugin({
-                    imageUploadHandler: async () => '/sample-image.png',
-                  }),
-                  tablePlugin(),
-                  thematicBreakPlugin(),
-                  codeBlockPlugin({ defaultCodeBlockLanguage: 'txt' }),
-                  codeMirrorPlugin({
-                    codeBlockLanguages: {
-                      js: 'JavaScript',
-                      css: 'CSS',
-                      txt: 'text',
-                      tsx: 'TypeScript',
-                    },
-                  }),
-                  diffSourcePlugin({
-                    viewMode: 'rich-text',
-                    diffMarkdown: data.note.content,
-                  }),
-                  markdownShortcutPlugin(),
-                  directivesPlugin({
-                    directiveDescriptors: [CalloutDirectiveDescriptor],
-                  }),
-                ]}
-              />
+              <Editor ref={editorRef} markdown={data.note.content} />
             </div>
           )
         }

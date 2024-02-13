@@ -6,4 +6,7 @@ export default {
   // publicPath: "/build/",
   // serverBuildPath: "build/index.js",
   browserNodeBuiltinsPolyfill: { modules: { punycode: true } },
+  serverDependenciesToBundle: [
+    /^modern-normalize/,
+  ],
 };

@@ -8,7 +8,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react';
-import normalizeStyles from 'node_modules/modern-normalize/modern-normalize.css';
+import 'node_modules/modern-normalize/modern-normalize.css';
 import styles from './shared.css';
 import waterStyles from './styles/water.light.css';
 
@@ -16,7 +16,6 @@ export const links: LinksFunction = () => [
   ...(cssBundleHref
     ? [
         { rel: 'stylesheet', href: cssBundleHref },
-        { rel: 'stylesheet', href: normalizeStyles },
         { rel: 'stylesheet', href: waterStyles },
         { rel: 'stylesheet', href: styles },
       ]

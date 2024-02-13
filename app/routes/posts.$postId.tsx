@@ -5,9 +5,10 @@ import type {
 } from '@remix-run/node';
 import { Form, json, useLoaderData, useSubmit } from '@remix-run/react';
 import { getMDXComponent } from 'mdx-bundler/client/index.js';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 
+import { type Editor as TipTapEditor } from '@tiptap/react';
 import { Editor } from '../components/Editor.client';
 import { getPost, updatePost } from '../models/post.server';
 
@@ -45,6 +46,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   const data = useLoaderData<typeof loader>();
   const submit = useSubmit();
+  const editorRef = useRef<TipTapEditor>(null);
 
   const Component = useMemo(
     () => getMDXComponent(data.note.code),
@@ -59,13 +61,25 @@ export default function Index() {
             <div>
               <Form
                 onSubmit={(event) => {
-                  submit({ content: '' }, { method: 'POST' });
+                  console.log(
+                    'save',
+                    editorRef?.current?.storage.markdown.getMarkdown(),
+                  );
+
+                  submit(
+                    {
+                      content:
+                        editorRef?.current?.storage.markdown.getMarkdown() ||
+                        '',
+                    },
+                    { method: 'POST' },
+                  );
                   event.preventDefault();
                 }}
               >
                 <button type="submit">Save</button>
               </Form>
-              <Editor markdown={data.note.content} />
+              <Editor editorRef={editorRef} markdown={data.note.content} />
             </div>
           )
         }

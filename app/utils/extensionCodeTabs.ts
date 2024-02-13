@@ -2,20 +2,15 @@ import { Node } from '@tiptap/core';
 import markdownitContainer from 'markdown-it-container';
 
 export default Node.create({
-  name: 'container',
-
+  name: 'codeTabs',
   group: 'block',
-
   content: 'block+',
-
   defining: true,
-
   addOptions() {
     return {
       classes: ['codeTabs'],
     };
   },
-
   addStorage() {
     return {
       markdown: {
@@ -36,7 +31,6 @@ export default Node.create({
       },
     };
   },
-
   addAttributes() {
     return {
       containerClass: {
@@ -51,7 +45,6 @@ export default Node.create({
       },
     };
   },
-
   parseHTML() {
     return [
       {
@@ -66,8 +59,20 @@ export default Node.create({
       },
     ];
   },
+  renderHTML({ node, HTMLAttributes }) {
+    const tabs = [];
 
-  renderHTML({ HTMLAttributes }) {
-    return ['div', HTMLAttributes, 0];
+    for (let i = 0; i < node.childCount; i += 1) {
+      const child = node.child(i);
+      const { language } = child.attrs;
+      if (language) {
+        tabs.push({ language });
+      }
+    }
+
+    const children = tabs.map(({ language }) => ['div', {}, language]);
+
+    // note: 0 contains the children of this node
+    return ['div', HTMLAttributes, ...children, ['div', {}, 0]];
   },
 });

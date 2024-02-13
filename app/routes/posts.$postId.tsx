@@ -5,11 +5,11 @@ import type {
 } from '@remix-run/node';
 import { Form, json, useLoaderData, useSubmit } from '@remix-run/react';
 import { getMDXComponent } from 'mdx-bundler/client/index.js';
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 
+import { Editor } from '../components/Editor.client';
 import { getPost, updatePost } from '../models/post.server';
-import { Editor, type MDXEditorMethods } from '../components/Editor.client';
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -44,17 +44,7 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const data = useLoaderData<typeof loader>();
-  const editorRef = useRef<MDXEditorMethods>(null);
   const submit = useSubmit();
-
-  // update editor content from external source
-  // note: this could be restricted to data.note.id if we want to avoid
-  // overrinding the same content with a save action
-  useEffect(() => {
-    if (editorRef.current && data.note.content) {
-      editorRef.current.setMarkdown(data.note.content);
-    }
-  }, [data.note.content]);
 
   const Component = useMemo(
     () => getMDXComponent(data.note.code),
@@ -69,16 +59,13 @@ export default function Index() {
             <div>
               <Form
                 onSubmit={(event) => {
-                  submit(
-                    { content: editorRef.current?.getMarkdown() || '' },
-                    { method: 'POST' },
-                  );
+                  submit({ content: '' }, { method: 'POST' });
                   event.preventDefault();
                 }}
               >
                 <button type="submit">Save</button>
               </Form>
-              <Editor ref={editorRef} markdown={data.note.content} />
+              <Editor markdown={data.note.content} />
             </div>
           )
         }

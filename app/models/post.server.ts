@@ -20,7 +20,7 @@ function myRemarkPlugin() {
         node.type === 'leafDirective' ||
         node.type === 'textDirective'
       ) {
-        if (node.name !== 'callout') return;
+        if (node.name !== 'codeTabs') return;
 
         const data = node.data || (node.data = {});
         const tagName = node.type === 'textDirective' ? 'span' : 'div';

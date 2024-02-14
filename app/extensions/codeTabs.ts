@@ -1,7 +1,9 @@
-import { Node } from '@tiptap/core';
+import { Node, mergeAttributes } from '@tiptap/core';
+import { ReactNodeViewRenderer } from '@tiptap/react';
 import markdownitContainer from 'markdown-it-container';
+import { CodeTabs } from '../components/CodeTabs';
 
-export default Node.create({
+export const ExtensionCodeTabs = Node.create({
   name: 'codeTabs',
   group: 'block',
   content: 'block+',
@@ -59,6 +61,13 @@ export default Node.create({
       },
     ];
   },
+  // renderHTML({ HTMLAttributes }) {
+  //   return ['codeTabs', mergeAttributes(HTMLAttributes)];
+  // },
+  // addNodeView() {
+  //   return ReactNodeViewRenderer(CodeTabs);
+  // },
+
   renderHTML({ node, HTMLAttributes }) {
     const tabs = [];
 

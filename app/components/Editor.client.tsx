@@ -6,7 +6,8 @@ import {
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect } from 'react';
 import { Markdown } from 'tiptap-markdown';
-import CodeTabs from '../utils/extensionCodeTabs';
+import { ExtensionCodeBlock } from '../extensions/codeBlock';
+import { ExtensionCodeTabs } from '../extensions/codeTabs';
 
 interface Props {
   editorRef: React.RefObject<TipTapEditor>;
@@ -80,8 +81,9 @@ export function Editor({ editorRef, markdown }: Props): React.JSX.Element {
         transformPastedText: true,
         transformCopiedText: true,
       }),
-      StarterKit,
-      CodeTabs,
+      StarterKit.configure({ codeBlock: false }),
+      ExtensionCodeTabs,
+      ExtensionCodeBlock,
     ],
     content: markdown,
     injectCSS: false,

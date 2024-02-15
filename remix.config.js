@@ -8,5 +8,6 @@ export default {
   browserNodeBuiltinsPolyfill: { modules: { punycode: true } },
   serverDependenciesToBundle: [
     /^modern-normalize/,
+    /^highlight.js/,
   ],
 };

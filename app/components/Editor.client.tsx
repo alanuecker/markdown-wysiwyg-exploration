@@ -1,13 +1,21 @@
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import {
   type Editor as TipTapEditor,
   EditorContent,
+  ReactNodeViewRenderer,
   useEditor,
 } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import css from 'highlight.js/lib/languages/css';
+import js from 'highlight.js/lib/languages/javascript';
+import ts from 'highlight.js/lib/languages/typescript';
+import html from 'highlight.js/lib/languages/xml';
+import 'highlight.js/styles/a11y-light.min.css';
+import { createLowlight } from 'lowlight';
 import { useEffect } from 'react';
 import { Markdown } from 'tiptap-markdown';
-import { ExtensionCodeBlock } from '../extensions/codeBlock';
 import { ExtensionCodeTabs } from '../extensions/codeTabs';
+import { CodeTab } from './CodeTab';
 
 interface Props {
   editorRef: React.RefObject<TipTapEditor>;
@@ -74,6 +82,8 @@ const MenuBar = ({ editor }: { editor: TipTapEditor | null }) => {
   );
 };
 
+const lowlight = createLowlight({ html, css, js, ts });
+
 export function Editor({ editorRef, markdown }: Props): React.JSX.Element {
   const editor = useEditor({
     extensions: [
@@ -83,7 +93,11 @@ export function Editor({ editorRef, markdown }: Props): React.JSX.Element {
       }),
       StarterKit.configure({ codeBlock: false }),
       ExtensionCodeTabs,
-      ExtensionCodeBlock,
+      CodeBlockLowlight.extend({
+        addNodeView() {
+          return ReactNodeViewRenderer(CodeTab);
+        },
+      }).configure({ lowlight }),
     ],
     content: markdown,
     injectCSS: false,

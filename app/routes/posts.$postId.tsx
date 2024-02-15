@@ -8,7 +8,6 @@ import { getMDXComponent } from 'mdx-bundler/client/index.js';
 import { useMemo, useRef } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 
-import { type Editor as TipTapEditor } from '@tiptap/react';
 import { Editor } from '../components/Editor.client';
 import { getPost, updatePost } from '../models/post.server';
 
@@ -79,7 +78,7 @@ export default function Index() {
               >
                 <button type="submit">Save</button>
               </Form>
-              <Editor editorRef={editorRef} markdown={data.note.content} />
+              <Editor editorRef={editorRef} markdown={data.note.slateData} />
             </div>
           )
         }

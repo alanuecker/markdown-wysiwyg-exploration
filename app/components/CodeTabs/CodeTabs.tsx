@@ -1,27 +1,21 @@
 import * as Tabs from '@radix-ui/react-tabs';
-import {
-  NodeViewContent,
-  type NodeViewProps,
-  NodeViewWrapper,
-} from '@tiptap/react';
 import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import {
   CodeTabsContext,
   type CodeTabsContextType,
 } from '../../context/CodeTabsContext';
-import { generateUID } from '../../utils/generateUUID';
 
-interface Props extends NodeViewProps {}
+interface Props {
+  children: React.ReactNode;
+}
 
-export function CodeTabs(props: Props): React.JSX.Element {
+export function CodeTabs({ children }: Props): React.JSX.Element {
   const [tabs, setTabs] = useState({});
 
-  const initCodeBlock: CodeTabsContextType = (
-    defaultLanguage,
-    updateAttributes,
-  ) => {
-    const id = generateUID();
-    setTabs({ ...tabs, id: { defaultLanguage, updateAttributes } });
+  const initCodeBlock: CodeTabsContextType = (defaultLanguage) => {
+    const id = uuidv4().slice(0, 8);
+    setTabs({ ...tabs, id: { defaultLanguage } });
 
     return id;
   };
@@ -30,7 +24,7 @@ export function CodeTabs(props: Props): React.JSX.Element {
 
   return (
     <CodeTabsContext.Provider value={initCodeBlock}>
-      <NodeViewWrapper as={Tabs.Root} className="TabsRoot" defaultValue="tab1">
+      <Tabs.Root className="TabsRoot" defaultValue="tab1">
         <Tabs.List className="TabsList" aria-label="Manage your account">
           <Tabs.Trigger className="TabsTrigger" value="tab1">
             Account
@@ -39,8 +33,8 @@ export function CodeTabs(props: Props): React.JSX.Element {
             Password
           </Tabs.Trigger>
         </Tabs.List>
-        <NodeViewContent />
-      </NodeViewWrapper>
+        {children}
+      </Tabs.Root>
     </CodeTabsContext.Provider>
   );
 }

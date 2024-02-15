@@ -5,6 +5,11 @@ import rehypePresetMinify from 'rehype-preset-minify';
 import rehypeSlug from 'rehype-slug';
 import remarkDirective from 'remark-directive';
 import remarkGfm from 'remark-gfm';
+import markdown from 'remark-parse';
+import { remarkToSlate } from 'remark-slate-transformer';
+import { slateToRemark } from 'remark-slate-transformer';
+import stringify from 'remark-stringify';
+import { unified } from 'unified';
 import { prisma } from '../utils/db.server';
 import { bundleMDX } from '../utils/mdx.server';
 
@@ -58,12 +63,26 @@ export async function getPost({ id }: Pick<Post, 'id'>) {
     },
   });
 
-  return { ...post, code };
+  const processor = unified()
+    .use(markdown)
+    // .use(remarkGfm)
+    // .use(remarkDirective)
+    // .use(myRemarkPlugin)
+    .use(remarkToSlate);
+
+  const slateData = processor.processSync(post?.content || '').result;
+
+  return { ...post, code, slateData };
 }
 
 export function updatePost({ id, content }: Pick<Post, 'id' | 'content'>) {
+  const processor = unified().use(stringify);
+
+  const ast = processor.runSync(slateToRemark(content || []));
+  const text = processor.stringify(ast);
+
   return prisma.post.update({
-    data: { content },
+    data: { content: text },
     where: { id },
   });
 }

@@ -1,8 +1,8 @@
 import { Node, mergeAttributes } from '@tiptap/core';
 import { ReactNodeViewRenderer } from '@tiptap/react';
 import markdownitContainer from 'markdown-it-container';
+import { v4 as uuidv4 } from 'uuid';
 import { CodeTabs } from '../components/CodeTabs/CodeTabs';
-import { generateUID } from '../utils/generateUUID';
 
 export const ExtensionCodeTabs = Node.create({
   name: 'codeTabs',
@@ -35,8 +35,11 @@ export const ExtensionCodeTabs = Node.create({
     };
   },
   addAttributes() {
+    const id = uuidv4();
     return {
-      id: generateUID(),
+      tabsId: {
+        default: id,
+      },
       containerClass: {
         default: null,
         parseHTML: (element) =>

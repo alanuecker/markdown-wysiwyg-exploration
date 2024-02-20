@@ -23,7 +23,8 @@
 		"defaultBranch": "main"
 	},
 	"formatter": {
-		"enabled": true
+		"enabled": true,
+		"formatWithErrors": true
 	},
 	"javascript": {
 		"formatter": {

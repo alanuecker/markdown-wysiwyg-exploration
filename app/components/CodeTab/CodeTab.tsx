@@ -6,7 +6,7 @@ interface Props {
   children: React.ReactHTML;
 }
 
-export function CodeTab({ children }: Props): React.JSX.Element {
+export function CodeTab({ attributes, children }: Props): React.JSX.Element {
   const [value, setValue] = useState<string>();
   const initCodeBlock = useContext(CodeTabsContext);
 
@@ -23,7 +23,7 @@ export function CodeTab({ children }: Props): React.JSX.Element {
   const Component = value ? Tabs.Content : 'div';
 
   return (
-    <Component value={value}>
+    <Component {...attributes} value={value}>
       <pre>
         <code>{children}</code>
       </pre>

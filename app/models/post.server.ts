@@ -6,8 +6,7 @@ import rehypeSlug from 'rehype-slug';
 import remarkDirective from 'remark-directive';
 import remarkGfm from 'remark-gfm';
 import markdown from 'remark-parse';
-import { remarkToSlate } from 'remark-slate-transformer';
-import { slateToRemark } from 'remark-slate-transformer';
+import { remarkToSlate, slateToRemark } from 'remark-slate-transformer';
 import stringify from 'remark-stringify';
 import { unified } from 'unified';
 import { prisma } from '../utils/db.server';
@@ -65,10 +64,18 @@ export async function getPost({ id }: Pick<Post, 'id'>) {
 
   const processor = unified()
     .use(markdown)
-    // .use(remarkGfm)
+    .use(remarkGfm)
     // .use(remarkDirective)
     // .use(myRemarkPlugin)
-    .use(remarkToSlate);
+    .use(remarkToSlate, {
+      overrides: {
+        codeTabs: (node, next) => {
+          console.log(node);
+
+          return { type: 'codeTabs', value: next(node) };
+        },
+      },
+    });
 
   const slateData = processor.processSync(post?.content || '').result;
 
@@ -76,7 +83,10 @@ export async function getPost({ id }: Pick<Post, 'id'>) {
 }
 
 export function updatePost({ id, content }: Pick<Post, 'id' | 'content'>) {
-  const processor = unified().use(stringify);
+  const processor = unified()
+    .use(remarkGfm)
+    // .use(remarkDirective)
+    .use(stringify);
 
   const ast = processor.runSync(slateToRemark(content || []));
   const text = processor.stringify(ast);

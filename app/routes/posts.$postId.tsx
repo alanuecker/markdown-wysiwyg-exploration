@@ -45,7 +45,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   const data = useLoaderData<typeof loader>();
   const submit = useSubmit();
-  const editorRef = useRef<TipTapEditor>(null);
+  const editorRef = useRef<Node[]>(null);
 
   const Component = useMemo(
     () => getMDXComponent(data.note.code),
@@ -56,20 +56,15 @@ export default function Index() {
     <>
       <ClientOnly fallback={<p>Loading...</p>}>
         {() =>
-          data.note.content && (
+          data.note.id && (
             <div>
               <Form
                 onSubmit={(event) => {
-                  console.log(
-                    'save',
-                    editorRef?.current?.storage.markdown.getMarkdown(),
-                  );
+                  console.log('save', editorRef?.current);
 
                   submit(
                     {
-                      content:
-                        editorRef?.current?.storage.markdown.getMarkdown() ||
-                        '',
+                      content: JSON.stringify(editorRef?.current || null),
                     },
                     { method: 'POST' },
                   );
@@ -78,7 +73,7 @@ export default function Index() {
               >
                 <button type="submit">Save</button>
               </Form>
-              <Editor editorRef={editorRef} markdown={data.note.slateData} />
+              <Editor ref={editorRef} initialValue={data.note.slateData} />
             </div>
           )
         }

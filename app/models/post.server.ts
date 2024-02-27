@@ -66,7 +66,6 @@ export async function getPost({ id }: Pick<Post, 'id'>) {
     .use(markdown)
     .use(remarkGfm)
     .use(remarkDirective)
-    // .use(myRemarkPlugin)
     .use(remarkToSlate);
 
   const slateData = processor.processSync(post?.content || '').result;
@@ -77,10 +76,17 @@ export async function getPost({ id }: Pick<Post, 'id'>) {
 export function updatePost({ id, content }: Pick<Post, 'id' | 'content'>) {
   const processor = unified()
     .use(remarkGfm)
-    // .use(remarkDirective)
+    .use(remarkDirective)
     .use(stringify);
 
-  const ast = processor.runSync(slateToRemark(content || []));
+  if (!content || !JSON.parse(content)) {
+    return prisma.post.update({
+      data: { content },
+      where: { id },
+    });
+  }
+
+  const ast = processor.runSync(slateToRemark(JSON.parse(content)));
   const text = processor.stringify(ast);
 
   return prisma.post.update({

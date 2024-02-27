@@ -65,17 +65,9 @@ export async function getPost({ id }: Pick<Post, 'id'>) {
   const processor = unified()
     .use(markdown)
     .use(remarkGfm)
-    // .use(remarkDirective)
+    .use(remarkDirective)
     // .use(myRemarkPlugin)
-    .use(remarkToSlate, {
-      overrides: {
-        codeTabs: (node, next) => {
-          console.log(node);
-
-          return { type: 'codeTabs', value: next(node) };
-        },
-      },
-    });
+    .use(remarkToSlate);
 
   const slateData = processor.processSync(post?.content || '').result;
 

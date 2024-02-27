@@ -8,7 +8,7 @@ import { getMDXComponent } from 'mdx-bundler/client/index.js';
 import { useMemo, useRef } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 
-import { Editor } from '../components/Editor.client';
+import { Editor } from '../components/Editor';
 import { getPost, updatePost } from '../models/post.server';
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {

@@ -1,32 +1,15 @@
-import React, { forwardRef, useEffect, useMemo, useState } from 'react';
-import { createEditor, Node } from 'slate';
-import {
-  Slate,
-  Editable,
-  withReact,
-  RenderElementProps,
-  RenderLeafProps,
-} from 'slate-react';
-import { withHistory } from 'slate-history';
-// import 'github-markdown-css';
+import React from 'react';
+import { RenderElementProps } from 'slate-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-const style: React.CSSProperties = {
-  flex: 1,
-  margin: 10,
-  overflowY: 'scroll',
-};
+interface Props extends RenderElementProps {}
 
-type Props = {
-  initialValue: Node[];
-};
-
-const renderElement = ({
+export function Element({
   attributes,
   children,
   element,
-}: RenderElementProps) => {
+}: Props): React.JSX.Element {
   switch (element.type) {
     case 'paragraph':
       return <p {...attributes}>{children}</p>;
@@ -150,75 +133,4 @@ const renderElement = ({
       break;
   }
   return <p {...attributes}>{children}</p>;
-};
-
-const renderLeaf = ({ attributes, children, leaf }: RenderLeafProps) => {
-  if (leaf.strong) {
-    children = <strong>{children}</strong>;
-  }
-  if (leaf.emphasis) {
-    children = <em>{children}</em>;
-  }
-  if (leaf.delete) {
-    children = <del>{children}</del>;
-  }
-  if (leaf.inlineCode) {
-    children = <code>{children}</code>;
-  }
-  return <span {...attributes}>{children}</span>;
-};
-
-const Editor = forwardRef<Node[], Props>(({ initialValue }, ref) => {
-  const editor = useState(() => {
-    const e = withHistory(withReact(createEditor()));
-    e.isInline = (element) => {
-      const { type } = element;
-      return type === 'link' || type === 'image';
-    };
-    e.isVoid = (element) => {
-      return element.type === 'image';
-    };
-    return e;
-  })[0];
-
-  const [value, setValue] = useState<Node[]>(
-    initialValue.length
-      ? initialValue
-      : [
-          {
-            type: 'paragraph',
-            children: [{ text: '' }],
-          },
-        ],
-  );
-
-  ref.current = value;
-
-  // Hack to update value externally
-  const [key, setKey] = useState(0);
-  useEffect(() => {
-    setValue(
-      initialValue.length
-        ? initialValue
-        : [
-            {
-              type: 'paragraph',
-              children: [{ text: '' }],
-            },
-          ],
-    );
-    setKey((p) => p + 1);
-  }, [initialValue]);
-
-  console.log(initialValue, value);
-
-  return (
-    <div className="markdown-body" style={style}>
-      <Slate key={key} editor={editor} initialValue={value} onChange={setValue}>
-        <Editable renderElement={renderElement} renderLeaf={renderLeaf} />
-      </Slate>
-    </div>
-  );
-});
-
-export { Editor };
+}

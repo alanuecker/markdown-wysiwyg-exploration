@@ -1,7 +1,7 @@
 import React from 'react';
-import { RenderElementProps } from 'slate-react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Transforms } from 'slate';
+import { ReactEditor, RenderElementProps, useSlateStatic } from 'slate-react';
+import { CodeLanguageSelect } from '../CodeLanguageSelect';
 
 interface Props extends RenderElementProps {}
 
@@ -10,6 +10,13 @@ export function Element({
   children,
   element,
 }: Props): React.JSX.Element {
+  const editor = useSlateStatic();
+
+  const setLanguage = (lang: string) => {
+    const path = ReactEditor.findPath(editor, element);
+    Transforms.setNodes(editor, { lang }, { at: path });
+  };
+
   switch (element.type) {
     case 'paragraph':
       return <p {...attributes}>{children}</p>;
@@ -39,9 +46,9 @@ export function Element({
     case 'list':
       if (element.ordered) {
         return <ol {...attributes}>{children}</ol>;
-      } else {
-        return <ul {...attributes}>{children}</ul>;
       }
+      return <ul {...attributes}>{children}</ul>;
+
     case 'listItem':
       return (
         <li {...attributes}>
@@ -63,32 +70,22 @@ export function Element({
       return <tr {...attributes}>{children}</tr>;
     case 'tableCell':
       return <td {...attributes}>{children}</td>;
-    case 'html':
-      return (
-        <div
-          {...attributes}
-          dangerouslySetInnerHTML={{
-            __html: element.children[0].text as string,
-          }}
-        />
-      );
     case 'code':
       return (
-        <SyntaxHighlighter
-          {...attributes}
-          style={dark}
-          language={element.lang as string}
-        >
-          {element.children[0].text}
-        </SyntaxHighlighter>
+        <div {...attributes} style={{ position: 'relative' }}>
+          <CodeLanguageSelect
+            value={element.lang || 'text'}
+            onChange={setLanguage}
+          />
+          {/* caretColor: to set the cursor color */}
+          <pre spellCheck={false} {...attributes}>
+            {children}
+          </pre>
+        </div>
       );
-    case 'yaml':
-    case 'toml':
-      return (
-        <pre>
-          <code {...attributes}>{children}</code>
-        </pre>
-      );
+    // used for rendering the lines in each code block
+    case 'code-line':
+      return <div {...attributes}>{children}</div>;
     case 'definition':
       break;
     case 'footnoteDefinition':

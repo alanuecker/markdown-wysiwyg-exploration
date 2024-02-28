@@ -9,13 +9,13 @@ import {
   ScrollRestoration,
 } from '@remix-run/react';
 import 'node_modules/modern-normalize/modern-normalize.css';
-import globalStyles from './styles/global.css';
+import waterTheme from './styles/water.light.css';
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref
     ? [
         { rel: 'stylesheet', href: cssBundleHref },
-        { rel: 'stylesheet', href: globalStyles },
+        { rel: 'stylesheet', href: waterTheme },
       ]
     : []),
 ];

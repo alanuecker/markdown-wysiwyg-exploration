@@ -16,5 +16,11 @@ export function Leaf({ attributes, children, leaf }: Props): React.JSX.Element {
   if (leaf.inlineCode) {
     children = <code>{children}</code>;
   }
-  return <span {...attributes}>{children}</span>;
+
+  const style = leaf.color ? { color: leaf.color } : undefined;
+  return (
+    <span {...attributes} style={style}>
+      {children}
+    </span>
+  );
 }

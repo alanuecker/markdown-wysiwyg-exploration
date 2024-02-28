@@ -1,106 +1,84 @@
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { createEditor, Node } from 'slate';
-import {
-  Slate,
-  Editable,
-  withReact,
-  RenderElementProps,
-  RenderLeafProps,
-} from 'slate-react';
+import { forwardRef, useEffect, useState } from 'react';
+import { Descendant, createEditor } from 'slate';
 import { withHistory } from 'slate-history';
+import { Editable, Slate, withReact } from 'slate-react';
+import { EditorBlockButton } from '../EditorBlockButton';
+import { EditorMarkButton } from '../EditorMarkButton';
+import { SetNodeToDecorations, useDecorate } from '../SetNodeToDecorations';
+import { ToolbarCodeBlockButton } from '../ToolbarCodeBlockButton';
 import { Element } from './Element';
 import { Leaf } from './Leaf';
-import { EditorMarkButton } from '../EditorMarkButton';
-import { EditorBlockButton } from '../EditorBlockButton';
 
 type Props = {
-  initialValue: Node[];
+  initialValue: Descendant[];
 };
 
-const Editor = forwardRef<Node[], Props>(({ initialValue }, ref) => {
-  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+export const Editor = forwardRef<Descendant[], Props>(
+  ({ initialValue }, ref) => {
+    const [editor] = useState(() => withHistory(withReact(createEditor())));
 
-  const renderElement = useCallback((props) => <Element {...props} />, []);
-  const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
+    const [value, setValue] = useState<Descendant[]>(initialValue);
 
-  const [value, setValue] = useState<Node[]>(
-    initialValue.length
-      ? initialValue
-      : [
-          {
-            type: 'paragraph',
-            children: [{ text: '' }],
-          },
-        ],
-  );
+    ref.current = value;
 
-  ref.current = value;
+    // Hack to update value externally
+    const [key, setKey] = useState(0);
+    useEffect(() => {
+      setValue(initialValue);
+      setKey((p) => p + 1);
+    }, [initialValue]);
 
-  // Hack to update value externally
-  const [key, setKey] = useState(0);
-  useEffect(() => {
-    setValue(
-      initialValue.length
-        ? initialValue
-        : [
-            {
-              type: 'paragraph',
-              children: [{ text: '' }],
-            },
-          ],
+    const decorate = useDecorate(editor);
+
+    return (
+      <div>
+        <Slate
+          key={key}
+          editor={editor}
+          initialValue={value}
+          onChange={setValue}
+        >
+          <div>
+            <EditorMarkButton format="strong">format_bold</EditorMarkButton>
+            <EditorMarkButton format="emphasis">format_italic</EditorMarkButton>
+            <EditorMarkButton format="delete">format_delete</EditorMarkButton>
+            <EditorBlockButton format="heading" depth={1}>
+              format_heading_1
+            </EditorBlockButton>
+            <EditorBlockButton format="heading" depth={2}>
+              format_heading_2
+            </EditorBlockButton>
+            <EditorBlockButton format="block-quote">
+              format_quote
+            </EditorBlockButton>
+            <EditorBlockButton format="numbered-list">
+              format_list_numbered
+            </EditorBlockButton>
+            <EditorBlockButton format="bulleted-list">
+              format_list_bulleted
+            </EditorBlockButton>
+            <EditorBlockButton format="left">
+              format_align_left
+            </EditorBlockButton>
+            <EditorBlockButton format="center">
+              format_align_center
+            </EditorBlockButton>
+            <EditorBlockButton format="right">
+              format_align_right
+            </EditorBlockButton>
+            <EditorBlockButton format="justify">
+              format_align_justify
+            </EditorBlockButton>
+            <ToolbarCodeBlockButton />
+          </div>
+          <SetNodeToDecorations />
+          <Editable
+            decorate={decorate}
+            renderElement={Element}
+            renderLeaf={Leaf}
+          />
+        </Slate>
+      </div>
     );
-    setKey((p) => p + 1);
-  }, [initialValue]);
-
-  console.log(initialValue, value);
-
-  return (
-    <div>
-      <Slate key={key} editor={editor} initialValue={value} onChange={setValue}>
-        <div>
-          <EditorMarkButton format="strong">format_bold</EditorMarkButton>
-          <EditorMarkButton format="emphasis">format_italic</EditorMarkButton>
-          <EditorMarkButton format="delete">
-            format_delete
-          </EditorMarkButton>
-          <EditorMarkButton format="code">code</EditorMarkButton>
-          {/* todo: change format to heading, depth 1 */}
-          <EditorBlockButton format="heading-one">
-            format_heading_1
-          </EditorBlockButton>
-          <EditorBlockButton format="heading-two">
-            format_heading_2
-          </EditorBlockButton>
-          <EditorBlockButton format="block-quote">
-            format_quote
-          </EditorBlockButton>
-          <EditorBlockButton format="numbered-list">
-            format_list_numbered
-          </EditorBlockButton>
-          <EditorBlockButton format="bulleted-list">
-            format_list_bulleted
-          </EditorBlockButton>
-          <EditorBlockButton format="left">format_align_left</EditorBlockButton>
-          <EditorBlockButton format="center">
-            format_align_center
-          </EditorBlockButton>
-          <EditorBlockButton format="right">
-            format_align_right
-          </EditorBlockButton>
-          <EditorBlockButton format="justify">
-            format_align_justify
-          </EditorBlockButton>
-        </div>
-        <Editable renderElement={renderElement} renderLeaf={renderLeaf} />
-      </Slate>
-    </div>
-  );
-});
-
-export { Editor };
+  },
+);

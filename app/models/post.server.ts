@@ -14,6 +14,7 @@ import { bundleMDX } from '../utils/mdx.server';
 
 import { h } from 'hastscript';
 import type { Root } from 'mdast';
+import { Descendant } from 'slate';
 import { visit } from 'unist-util-visit';
 
 function myRemarkPlugin() {
@@ -70,7 +71,20 @@ export async function getPost({ id }: Pick<Post, 'id'>) {
 
   const slateData = processor.processSync(post?.content || '').result;
 
-  return { ...post, code, slateData };
+  const cleanedSlateData = slateData.map((entry) => {
+    if (entry.type === 'code') {
+      return {
+        ...entry,
+        children: entry.children[0].text
+          .split('\n')
+          .map((line) => ({ type: 'code-line', children: [{ text: line }] })),
+      };
+    }
+
+    return entry;
+  });
+
+  return { ...post, code, slateData: cleanedSlateData };
 }
 
 export function updatePost({ id, content }: Pick<Post, 'id' | 'content'>) {
@@ -86,7 +100,36 @@ export function updatePost({ id, content }: Pick<Post, 'id' | 'content'>) {
     });
   }
 
-  const ast = processor.runSync(slateToRemark(JSON.parse(content)));
+  const cleanedContent = JSON.parse(content).map((entry: Descendant) => {
+    if (entry.type === 'code') {
+      /**
+       * Node structure
+       * - code
+       * - children
+       *   - code-line
+       *   - children
+       *     - text
+       */
+
+      const { type, children, ...rest } = entry;
+
+      const text = children
+        .map((line) => {
+          return line.children.map((child) => child.text);
+        })
+        .join('\n');
+
+      return {
+        type,
+        children: [{ text }],
+        ...rest,
+      };
+    }
+
+    return entry;
+  }, []);
+
+  const ast = processor.runSync(slateToRemark(cleanedContent));
   const text = processor.stringify(ast);
 
   return prisma.post.update({

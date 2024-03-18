@@ -1,6 +1,7 @@
 import React from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor, RenderElementProps, useSlateStatic } from 'slate-react';
+import { CodeBlock } from '../CodeBlock';
 import { CodeLanguageSelect } from '../CodeLanguageSelect';
 
 interface Props extends RenderElementProps {}
@@ -10,13 +11,6 @@ export function Element({
   children,
   element,
 }: Props): React.JSX.Element {
-  const editor = useSlateStatic();
-
-  const setLanguage = (lang: string) => {
-    const path = ReactEditor.findPath(editor, element);
-    Transforms.setNodes(editor, { lang }, { at: path });
-  };
-
   switch (element.type) {
     case 'paragraph':
       return <p {...attributes}>{children}</p>;
@@ -72,16 +66,9 @@ export function Element({
       return <td {...attributes}>{children}</td>;
     case 'code':
       return (
-        <div {...attributes} style={{ position: 'relative' }}>
-          <CodeLanguageSelect
-            value={element.lang || 'text'}
-            onChange={setLanguage}
-          />
-          {/* caretColor: to set the cursor color */}
-          <pre spellCheck={false} {...attributes}>
-            {children}
-          </pre>
-        </div>
+        <CodeBlock {...attributes} element={element}>
+          {children}
+        </CodeBlock>
       );
     // used for rendering the lines in each code block
     case 'code-line':

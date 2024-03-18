@@ -10,23 +10,24 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const CodeBlock = forwardRef<any, Props>(
+export const CodeBlock = forwardRef<HTMLDivElement, Props>(
   ({ element, children, ...props }, ref) => {
     const editor = useSlateStatic();
 
-    const setLanguage = (value: string) => {
+    const setLanguage = (lang: string) => {
       const path = ReactEditor.findPath(editor, element);
-      Transforms.setNodes(editor, { lang: value }, { at: path });
+      Transforms.setNodes(editor, { lang }, { at: path });
     };
 
     return (
-      <div
-        {...props}
-        ref={ref}
-        style={{ position: 'relative', border: '1px solid black' }}
-      >
-        <CodeLanguageSelect value={element.lang} onChange={setLanguage} />
-        <pre>{children}</pre>
+      <div style={{ position: 'relative' }}>
+        <CodeLanguageSelect
+          value={element.lang || 'text'}
+          onChange={setLanguage}
+        />
+        <pre spellCheck={false} {...props}>
+          {children}
+        </pre>
       </div>
     );
   },

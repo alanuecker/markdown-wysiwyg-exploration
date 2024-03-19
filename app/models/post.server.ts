@@ -37,6 +37,23 @@ function myRemarkPlugin() {
   };
 }
 
+function parseRemarkCodeLineToSlate(entry) {
+  if (entry.type === 'code') {
+    return {
+      ...entry,
+      children: entry.children[0].text
+        .split('\n')
+        .map((line) => ({ type: 'code-line', children: [{ text: line }] })),
+    };
+  }
+
+  if (entry.children.some(({ type }) => type === 'code')) {
+    entry.children = entry.children.map(parseRemarkCodeLineToSlate);
+  }
+
+  return entry;
+}
+
 export async function getPost({ id }: Pick<Post, 'id'>) {
   const post = await prisma.post.findFirst({
     select: { id: true, content: true, title: true },
@@ -71,23 +88,57 @@ export async function getPost({ id }: Pick<Post, 'id'>) {
 
   const slateData = processor.processSync(post?.content || '').result;
 
-  const cleanedSlateData = slateData.map((entry) => {
-    if (entry.type === 'code') {
-      return {
-        ...entry,
-        children: entry.children[0].text
-          .split('\n')
-          .map((line) => ({ type: 'code-line', children: [{ text: line }] })),
-      };
-    }
+  const cleanedSlateData = slateData.map(parseRemarkCodeLineToSlate);
 
-    return entry;
-  });
+  console.log('slate data', cleanedSlateData);
 
   return { ...post, code, slateData: cleanedSlateData };
 }
 
+function parseSlateCodeLineToRemark(entry: Descendant) {
+  if (entry.type === 'code') {
+    /**
+     * Node structure
+     * - code
+     * - children
+     *   - code-line
+     *   - children
+     *     - text
+     */
+
+    const { type, children, ...rest } = entry;
+
+    const text = children
+      .map((line) => {
+        console.log(line);
+        if (line.type === 'code-line') {
+          return line.children?.map((child) => child.text);
+        }
+        if (line.text) {
+          return line.text;
+        }
+        return undefined;
+      })
+      .filter(Boolean)
+      .join('\n');
+
+    return {
+      type,
+      children: [{ text }],
+      ...rest,
+    };
+  }
+
+  if (entry.children.some(({ type }) => type === 'code')) {
+    entry.children = entry.children.map(parseSlateCodeLineToRemark);
+  }
+
+  return entry;
+}
+
 export function updatePost({ id, content }: Pick<Post, 'id' | 'content'>) {
+  console.log('update:', content);
+
   const processor = unified()
     .use(remarkGfm)
     .use(remarkDirective)
@@ -100,34 +151,10 @@ export function updatePost({ id, content }: Pick<Post, 'id' | 'content'>) {
     });
   }
 
-  const cleanedContent = JSON.parse(content).map((entry: Descendant) => {
-    if (entry.type === 'code') {
-      /**
-       * Node structure
-       * - code
-       * - children
-       *   - code-line
-       *   - children
-       *     - text
-       */
-
-      const { type, children, ...rest } = entry;
-
-      const text = children
-        .map((line) => {
-          return line.children.map((child) => child.text);
-        })
-        .join('\n');
-
-      return {
-        type,
-        children: [{ text }],
-        ...rest,
-      };
-    }
-
-    return entry;
-  }, []);
+  const cleanedContent = JSON.parse(content).map(
+    parseSlateCodeLineToRemark,
+    [],
+  );
 
   const ast = processor.runSync(slateToRemark(cleanedContent));
   const text = processor.stringify(ast);

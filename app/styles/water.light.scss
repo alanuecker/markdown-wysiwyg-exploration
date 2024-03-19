@@ -69,8 +69,7 @@ h2,
 h3,
 h4,
 h5,
-h6,
-strong {
+h6 {
   color: #000;
   color: var(--text-bright)
 }
@@ -669,7 +668,6 @@ body>footer {
   h6,
   input,
   pre,
-  strong,
   summary,
   textarea {
     color: #000

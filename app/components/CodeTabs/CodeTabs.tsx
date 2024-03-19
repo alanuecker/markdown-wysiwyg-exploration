@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const CodeTabs = forwardRef<HTMLDivElement, Props>(
-  ({ element, children }, ref) => {
+  ({ element, children, ...props }, ref) => {
     const [tabs, setTabs] = useState<Tab[]>([]);
 
     function addCodeBlock(defaultLanguage: string): string {
@@ -35,27 +35,28 @@ export const CodeTabs = forwardRef<HTMLDivElement, Props>(
     console.log(tabs);
 
     return (
-      <CodeTabsContext.Provider value={{ addCodeBlock, removeCodeBlock }}>
-        <Tabs.Root
-          ref={ref}
-          className={classes.root}
-          defaultValue={tabs[0]?.id}
-        >
-          <Tabs.List className="TabsList" contentEditable={false}>
-            {!!tabs.length &&
-              tabs.map(({ id, lang }) => (
-                <Tabs.Trigger
-                  key={`${id}-${lang}`}
-                  className="TabsTrigger"
-                  value={id}
-                >
-                  {`${id}-${lang}`}
-                </Tabs.Trigger>
-              ))}
-          </Tabs.List>
+      <Tabs.Root
+        {...props}
+        ref={ref}
+        className={classes.root}
+        defaultValue={tabs[0]?.id}
+      >
+        <Tabs.List className="TabsList" contentEditable={false}>
+          {!!tabs.length &&
+            tabs.map(({ id, lang }) => (
+              <Tabs.Trigger
+                key={`${id}-${lang}`}
+                className="TabsTrigger"
+                value={id}
+              >
+                {`${id}-${lang}`}
+              </Tabs.Trigger>
+            ))}
+        </Tabs.List>
+        <CodeTabsContext.Provider value={{ addCodeBlock, removeCodeBlock }}>
           {children}
-        </Tabs.Root>
-      </CodeTabsContext.Provider>
+        </CodeTabsContext.Provider>
+      </Tabs.Root>
     );
   },
 );

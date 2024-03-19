@@ -72,6 +72,20 @@ export default function Index() {
                 }}
               >
                 <button type="submit">Save</button>
+              </Form>              <Form
+                onSubmit={(event) => {
+                  console.log('save', editorRef?.current);
+
+                  submit(
+                    {
+                      content: JSON.stringify(''),
+                    },
+                    { method: 'POST' },
+                  );
+                  event.preventDefault();
+                }}
+              >
+                <button type="submit">Clear</button>
               </Form>
               <Editor ref={editorRef} initialValue={data.note.slateData} />
             </div>

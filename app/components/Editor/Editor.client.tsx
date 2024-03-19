@@ -40,7 +40,7 @@ export const Editor = forwardRef<Descendant[], Props>(
           onChange={setValue}
         >
           <div>
-            <EditorMarkButton format="strong">format_bold</EditorMarkButton>
+            {/* <EditorMarkButton format="strong">format_bold</EditorMarkButton>
             <EditorMarkButton format="emphasis">format_italic</EditorMarkButton>
             <EditorMarkButton format="delete">format_delete</EditorMarkButton>
             <EditorBlockButton format="heading" depth={1}>
@@ -69,7 +69,7 @@ export const Editor = forwardRef<Descendant[], Props>(
             </EditorBlockButton>
             <EditorBlockButton format="justify">
               format_align_justify
-            </EditorBlockButton>
+            </EditorBlockButton> */}
             <ToolbarCodeBlockButton />
             <ToolbarTabsButton />
           </div>

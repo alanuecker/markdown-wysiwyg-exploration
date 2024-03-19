@@ -1,9 +1,9 @@
 import React from 'react';
 
-import classes from './style.module.css';
-import { useSlate } from 'slate-react';
-import { BaseEditor, Editor } from 'slate';
 import classNames from 'classnames';
+import { BaseEditor, Editor } from 'slate';
+import { useSlate } from 'slate-react';
+import classes from './style.module.scss';
 
 const isMarkActive = (editor: BaseEditor, format: string) => {
   const marks = Editor.marks(editor);

@@ -1,12 +1,9 @@
 import * as Tabs from '@radix-ui/react-tabs';
-import React, { forwardRef, useRef, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { BaseElement } from 'slate';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  CodeTabsContext,
-  type CodeTabsContextType,
-} from '../../context/CodeTabsContext';
-import classes from './style.module.css';
+import { CodeTabsContext } from '../../context/CodeTabsContext';
+import classes from './style.module.scss';
 
 interface Tab {
   id: string;

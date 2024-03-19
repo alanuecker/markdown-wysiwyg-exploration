@@ -1,24 +1,12 @@
-import { cssBundleHref } from '@remix-run/css-bundle';
-import type { LinksFunction } from '@remix-run/node';
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react';
-import 'node_modules/modern-normalize/modern-normalize.css';
-import waterTheme from './styles/water.light.css';
-
-export const links: LinksFunction = () => [
-  ...(cssBundleHref
-    ? [
-        { rel: 'stylesheet', href: cssBundleHref },
-        { rel: 'stylesheet', href: waterTheme },
-      ]
-    : []),
-];
+import 'modern-normalize/modern-normalize.css';
+import './styles/water.light.scss';
 
 export default function App() {
   return (
@@ -33,7 +21,6 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   );

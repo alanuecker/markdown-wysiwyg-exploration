@@ -1,11 +1,8 @@
 import React from 'react';
-import { Element as SlateElement, Transforms } from 'slate';
+import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
-import classes from './style.module.css';
 
-interface Props {}
-
-export function ToolbarTabsButton({}: Props): React.JSX.Element {
+export function ToolbarTabsButton(): React.JSX.Element {
   const editor = useSlateStatic();
 
   const handleClick = () => {

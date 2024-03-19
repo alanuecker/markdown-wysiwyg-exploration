@@ -5,23 +5,22 @@
   "type": "module",
   "scripts": {
     "setup": "prisma generate && prisma migrate deploy",
-    "build": "remix build",
-    "dev": "remix dev --manual",
+    "build": "remix vite:build",
+    "dev": "remix vite:dev --manual",
     "lint": "biome check --apply .",
-    "start": "remix-serve ./build/index.js",
+    "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@prisma/client": "^5.9.1",
+    "@prisma/client": "^5.11.0",
     "@radix-ui/react-tabs": "^1.0.4",
-    "@remix-run/css-bundle": "^2.6.0",
-    "@remix-run/node": "^2.6.0",
-    "@remix-run/react": "^2.6.0",
-    "@remix-run/serve": "^2.6.0",
+    "@remix-run/node": "^2.8.1",
+    "@remix-run/react": "^2.8.1",
+    "@remix-run/serve": "^2.8.1",
     "classnames": "^2.5.1",
-    "esbuild": "^0.20.0",
+    "esbuild": "^0.20.2",
     "hastscript": "^9.0.0",
-    "isbot": "^4.1.0",
+    "isbot": "^5.1.2",
     "mdx-bundler": "^10.0.1",
     "modern-normalize": "^2.0.0",
     "react": "^18.2.0",
@@ -40,15 +39,17 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.5.3",
-    "@remix-run/dev": "^2.6.0",
+    "@biomejs/biome": "1.6.1",
+    "@remix-run/dev": "^2.8.1",
     "@types/mdast": "^4.0.3",
-    "@types/react": "^18.2.20",
-    "@types/react-dom": "^18.2.7",
+    "@types/react": "^18.2.67",
+    "@types/react-dom": "^18.2.22",
     "@types/uuid": "^9.0.8",
-    "prisma": "^5.9.1",
-    "shiki": "^1.1.7",
-    "typescript": "^5.1.6"
+    "prisma": "^5.11.0",
+    "sass": "^1.72.0",
+    "shiki": "^1.2.0",
+    "typescript": "^5.4.2",
+    "vite": "^5.1.6"
   },
   "engines": {
     "node": ">=18.0.0"

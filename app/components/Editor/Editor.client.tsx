@@ -6,6 +6,7 @@ import { EditorBlockButton } from '../EditorBlockButton';
 import { EditorMarkButton } from '../EditorMarkButton';
 import { SetNodeToDecorations, useDecorate } from '../SetNodeToDecorations';
 import { ToolbarCodeBlockButton } from '../ToolbarCodeBlockButton';
+import { ToolbarTabsButton } from '../ToolbarTabsButton';
 import { Element } from './Element';
 import { Leaf } from './Leaf';
 
@@ -70,6 +71,7 @@ export const Editor = forwardRef<Descendant[], Props>(
               format_align_justify
             </EditorBlockButton>
             <ToolbarCodeBlockButton />
+            <ToolbarTabsButton />
           </div>
           <SetNodeToDecorations />
           <Editable

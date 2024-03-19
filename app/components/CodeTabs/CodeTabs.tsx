@@ -1,40 +1,66 @@
 import * as Tabs from '@radix-ui/react-tabs';
-import React, { useState } from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
+import { BaseElement } from 'slate';
 import { v4 as uuidv4 } from 'uuid';
 import {
   CodeTabsContext,
   type CodeTabsContextType,
 } from '../../context/CodeTabsContext';
+import classes from './style.module.css';
+
+interface Tab {
+  id: string;
+  lang: string;
+}
 
 interface Props {
+  element: BaseElement;
   children: React.ReactNode;
 }
 
-export function CodeTabs({ children }: Props): React.JSX.Element {
-  const [tabs, setTabs] = useState({});
+export const CodeTabs = forwardRef<HTMLDivElement, Props>(
+  ({ element, children }, ref) => {
+    const [tabs, setTabs] = useState<Tab[]>([]);
 
-  const initCodeBlock: CodeTabsContextType = (defaultLanguage) => {
-    const id = uuidv4().slice(0, 8);
-    setTabs({ ...tabs, id: { defaultLanguage } });
+    function addCodeBlock(defaultLanguage: string): string {
+      const id = uuidv4().slice(0, 8);
+      setTabs((val) => [...val, { id: id, lang: defaultLanguage }]);
 
-    return id;
-  };
+      console.log('asign', defaultLanguage, id);
 
-  console.log(tabs);
+      return id;
+    }
 
-  return (
-    <CodeTabsContext.Provider value={initCodeBlock}>
-      <Tabs.Root className="TabsRoot" defaultValue="tab1">
-        <Tabs.List className="TabsList" aria-label="Manage your account">
-          <Tabs.Trigger className="TabsTrigger" value="tab1">
-            Account
-          </Tabs.Trigger>
-          <Tabs.Trigger className="TabsTrigger" value="tab2">
-            Password
-          </Tabs.Trigger>
-        </Tabs.List>
-        {children}
-      </Tabs.Root>
-    </CodeTabsContext.Provider>
-  );
-}
+    function removeCodeBlock(tabId: string): void {
+      setTabs((val) => val.filter(({ id }) => id !== tabId));
+    }
+
+    console.log(tabs);
+
+    return (
+      <CodeTabsContext.Provider value={{ addCodeBlock, removeCodeBlock }}>
+        <Tabs.Root
+          ref={ref}
+          className={classes.root}
+          defaultValue={tabs[0]?.id}
+        >
+          <Tabs.List className="TabsList" contentEditable={false}>
+            {!!tabs.length &&
+              tabs.map(({ id, lang }) => (
+                <Tabs.Trigger
+                  key={`${id}-${lang}`}
+                  className="TabsTrigger"
+                  value={id}
+                >
+                  {`${id}-${lang}`}
+                </Tabs.Trigger>
+              ))}
+          </Tabs.List>
+          {children}
+        </Tabs.Root>
+      </CodeTabsContext.Provider>
+    );
+  },
+);
+
+CodeTabs.displayName = 'CodeTabs';

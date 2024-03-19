@@ -1,5 +1,11 @@
 import { createContext } from 'react';
 
-export type CodeTabsContextType = (defaultLanguage: string) => string;
+export type CodeTabsContextType = {
+  addCodeBlock: (defaultLanguage: string) => string;
+  removeCodeBlock: (id: string) => void;
+};
 
-export const CodeTabsContext = createContext<CodeTabsContextType | null>(null);
+export const CodeTabsContext = createContext<CodeTabsContextType>({
+  addCodeBlock: null,
+  removeCodeBlock: null,
+});

@@ -1,0 +1,7 @@
+.root {
+  background-color: var(--background-alt);
+  color: var(--text-main);
+  border-radius: 0.5rem;
+  border-color: var(--border);
+  padding: 10px 30px
+}

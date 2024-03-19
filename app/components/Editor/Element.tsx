@@ -1,8 +1,7 @@
 import React from 'react';
-import { Transforms } from 'slate';
-import { ReactEditor, RenderElementProps, useSlateStatic } from 'slate-react';
+import { RenderElementProps } from 'slate-react';
 import { CodeBlock } from '../CodeBlock';
-import { CodeLanguageSelect } from '../CodeLanguageSelect';
+import { CodeTabs } from '../CodeTabs';
 
 interface Props extends RenderElementProps {}
 
@@ -108,6 +107,14 @@ export function Element({
     case 'footnoteReference':
       break;
     case 'containerDirective':
+      if (element.name === 'code-tabs') {
+        return (
+          <CodeTabs {...attributes} element={element}>
+            {children}
+          </CodeTabs>
+        );
+      }
+
       return <div style={{ color: 'red' }}>{children}</div>;
     case 'leafDirective':
       return <div style={{ color: 'blue' }}>{children}</div>;

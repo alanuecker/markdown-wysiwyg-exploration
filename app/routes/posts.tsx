@@ -29,7 +29,7 @@ export default function NotesPage() {
             <p className="p-4">No posts yet</p>
           ) : (
             <ol>
-              {data.postListItems.map((post) => (
+              {data.postListItems.map(post => (
                 <li key={post.id}>
                   <NavLink to={post.id}>📝 {post.title}</NavLink>
                 </li>

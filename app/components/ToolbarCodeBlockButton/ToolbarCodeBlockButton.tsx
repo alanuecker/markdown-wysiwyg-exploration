@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Element as SlateElement, Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
 
@@ -10,21 +11,21 @@ export function ToolbarCodeBlockButton(): React.JSX.Element {
       editor,
       { type: 'code', lang: 'javascript', children: [] },
       {
-        match: (n) => SlateElement.isElement(n) && n.type === 'paragraph',
+        match: n => SlateElement.isElement(n) && n.type === 'paragraph',
         split: true,
       },
     );
     Transforms.setNodes(
       editor,
       { type: 'code-line' },
-      { match: (n) => SlateElement.isElement(n) && n.type === 'paragraph' },
+      { match: n => SlateElement.isElement(n) && n.type === 'paragraph' },
     );
   };
 
   return (
     <button
       type="button"
-      onMouseDown={(event) => {
+      onMouseDown={event => {
         event.preventDefault();
         handleClick();
       }}

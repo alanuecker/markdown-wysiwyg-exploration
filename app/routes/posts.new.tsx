@@ -1,7 +1,8 @@
+import { useEffect, useRef } from 'react';
+
 import type { ActionFunctionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { Form, useActionData } from '@remix-run/react';
-import { useEffect, useRef } from 'react';
 
 import { createPost } from '../models/post.server';
 

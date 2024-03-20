@@ -1,0 +1,17 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "plugins": ["stylelint-a11y", "stylelint-prettier"],
+  "rules": {
+    "prettier/prettier": true,
+    "declaration-block-no-duplicate-properties": true,
+    "max-nesting-depth": [
+      2,
+      {
+        "ignore": ["pseudo-classes"]
+      }
+    ],
+    "value-keyword-case": ["lower", { "camelCaseSvgKeywords": true }],
+    "selector-class-pattern": null,
+    "media-feature-range-notation": "prefix"
+  }
+}

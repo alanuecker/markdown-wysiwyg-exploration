@@ -17,7 +17,7 @@ export function CodeLanguageSelect({
       {...props}
       value={value}
       contentEditable={false}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={e => onChange(e.target.value)}
     >
       <option value="css">CSS</option>
       <option value="html">HTML</option>

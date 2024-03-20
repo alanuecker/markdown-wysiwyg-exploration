@@ -1,3 +1,5 @@
+import { useMemo, useRef } from 'react';
+
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -5,7 +7,6 @@ import type {
 } from '@remix-run/node';
 import { Form, json, useLoaderData, useSubmit } from '@remix-run/react';
 import { getMDXComponent } from 'mdx-bundler/client/index.js';
-import { useMemo, useRef } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 
 import { Editor } from '../components/Editor';
@@ -59,7 +60,7 @@ export default function Index() {
           data.note.id && (
             <div>
               <Form
-                onSubmit={(event) => {
+                onSubmit={event => {
                   console.log('save', editorRef?.current);
 
                   submit(
@@ -72,8 +73,9 @@ export default function Index() {
                 }}
               >
                 <button type="submit">Save</button>
-              </Form>              <Form
-                onSubmit={(event) => {
+              </Form>{' '}
+              <Form
+                onSubmit={event => {
                   console.log('save', editorRef?.current);
 
                   submit(

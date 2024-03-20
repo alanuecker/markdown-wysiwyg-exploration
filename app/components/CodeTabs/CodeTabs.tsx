@@ -1,8 +1,11 @@
-import {Tabs} from '@radix-ui/themes';
 import React, { forwardRef, useState } from 'react';
+
+import { Tabs } from '@radix-ui/themes';
 import { BaseElement } from 'slate';
 import { v4 as uuidv4 } from 'uuid';
+
 import { CodeTabsContext } from '../../context/CodeTabsContext';
+
 import classes from './style.module.scss';
 
 interface Tab {
@@ -16,12 +19,12 @@ interface Props {
 }
 
 export const CodeTabs = forwardRef<HTMLDivElement, Props>(
-  ({ element, children, ...props }, ref) => {
+  ({ children, ...props }, ref) => {
     const [tabs, setTabs] = useState<Tab[]>([]);
 
     function addCodeBlock(defaultLanguage: string): string {
       const id = uuidv4().slice(0, 8);
-      setTabs((val) => [...val, { id: id, lang: defaultLanguage }]);
+      setTabs(val => [...val, { id: id, lang: defaultLanguage }]);
 
       console.log('asign', defaultLanguage, id);
 
@@ -29,7 +32,7 @@ export const CodeTabs = forwardRef<HTMLDivElement, Props>(
     }
 
     function removeCodeBlock(tabId: string): void {
-      setTabs((val) => val.filter(({ id }) => id !== tabId));
+      setTabs(val => val.filter(({ id }) => id !== tabId));
     }
 
     return (

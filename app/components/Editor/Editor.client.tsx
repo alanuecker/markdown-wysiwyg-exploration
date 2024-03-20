@@ -1,12 +1,15 @@
 import { forwardRef, useEffect, useState } from 'react';
+
 import { Descendant, createEditor } from 'slate';
 import { withHistory } from 'slate-history';
 import { Editable, Slate, withReact } from 'slate-react';
-import { EditorBlockButton } from '../EditorBlockButton';
-import { EditorMarkButton } from '../EditorMarkButton';
+
+// import { EditorBlockButton } from '../EditorBlockButton';
+// import { EditorMarkButton } from '../EditorMarkButton';
 import { SetNodeToDecorations, useDecorate } from '../SetNodeToDecorations';
 import { ToolbarCodeBlockButton } from '../ToolbarCodeBlockButton';
 import { ToolbarTabsButton } from '../ToolbarTabsButton';
+
 import { Element } from './Element';
 import { Leaf } from './Leaf';
 
@@ -26,7 +29,7 @@ export const Editor = forwardRef<Descendant[], Props>(
     const [key, setKey] = useState(0);
     useEffect(() => {
       setValue(initialValue);
-      setKey((p) => p + 1);
+      setKey(p => p + 1);
     }, [initialValue]);
 
     const decorate = useDecorate(editor);

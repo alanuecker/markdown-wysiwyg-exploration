@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+
 import { BundledLanguage, getHighlighter } from 'shiki';
 import {
   Descendant,
@@ -44,7 +45,7 @@ export const useDecorate = (
   editor: Editor,
 ): (([node, path]: NodeEntry) => Range[]) => {
   return useCallback(
-    ([node, path]) => {
+    ([node]) => {
       if (SlateElement.isElement(node) && node.type === 'code-line') {
         const ranges = editor.nodeToDecorations?.get(node) || [];
         return ranges;
@@ -54,27 +55,6 @@ export const useDecorate = (
     },
     [editor.nodeToDecorations],
   );
-};
-
-// precalculate editor.nodeToDecorations map to use it inside decorate function then
-export const SetNodeToDecorations = () => {
-  const editor = useSlate();
-
-  const blockEntries = Array.from(
-    Editor.nodes(editor, {
-      at: [],
-      mode: 'highest',
-      match: (n) => SlateElement.isElement(n) && n.type === 'code',
-    }),
-  ) as NodeEntry<CodeElement>[];
-
-  const nodeToDecorations: Map<SlateElement, Range[]> = mergeMaps(
-    ...blockEntries.map(getChildNodeToDecorations),
-  );
-
-  editor.nodeToDecorations = nodeToDecorations;
-
-  return null;
 };
 
 const mergeMaps = <K, V>(...maps: Map<K, V>[]) => {
@@ -105,7 +85,7 @@ const getChildNodeToDecorations = ([
     return nodeToDecorations;
   }
 
-  const codeText = block.children.map((line) => Node.string(line)).join('\n');
+  const codeText = block.children.map(line => Node.string(line)).join('\n');
   const themedTokens = highlighter.codeToTokens(codeText, {
     lang: language,
     theme: 'github-light',
@@ -145,3 +125,24 @@ const getChildNodeToDecorations = ([
 
   return nodeToDecorations;
 };
+
+// precalculate editor.nodeToDecorations map to use it inside decorate function then
+export function SetNodeToDecorations() {
+  const editor = useSlate();
+
+  const blockEntries = Array.from(
+    Editor.nodes(editor, {
+      at: [],
+      mode: 'highest',
+      match: n => SlateElement.isElement(n) && n.type === 'code',
+    }),
+  ) as NodeEntry<CodeElement>[];
+
+  const nodeToDecorations: Map<SlateElement, Range[]> = mergeMaps(
+    ...blockEntries.map(getChildNodeToDecorations),
+  );
+
+  editor.nodeToDecorations = nodeToDecorations;
+
+  return null;
+}

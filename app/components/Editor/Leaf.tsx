@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { RenderLeafProps } from 'slate-react';
 
 interface Props extends RenderLeafProps {}

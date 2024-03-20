@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
 
@@ -47,7 +48,7 @@ export function ToolbarTabsButton(): React.JSX.Element {
   return (
     <button
       type="button"
-      onMouseDown={(event) => {
+      onMouseDown={event => {
         event.preventDefault();
         handleClick();
       }}

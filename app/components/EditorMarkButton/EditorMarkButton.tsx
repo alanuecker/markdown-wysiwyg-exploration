@@ -3,6 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { BaseEditor, Editor } from 'slate';
 import { useSlate } from 'slate-react';
+
 import classes from './style.module.scss';
 
 const isMarkActive = (editor: BaseEditor, format: string) => {
@@ -35,7 +36,7 @@ export function EditorMarkButton({
     <button
       type="button"
       className={classNames({ [classes.active]: isMarkActive(editor, format) })}
-      onMouseDown={(event) => {
+      onMouseDown={event => {
         event.preventDefault();
         toggleMark(editor, format);
       }}

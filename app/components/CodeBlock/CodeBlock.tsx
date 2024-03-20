@@ -1,4 +1,3 @@
-import {Tabs} from '@radix-ui/themes';
 import React, {
   forwardRef,
   useContext,
@@ -6,10 +5,14 @@ import React, {
   useRef,
   useState,
 } from 'react';
+
+import { Tabs } from '@radix-ui/themes';
 import { BaseElement, Transforms } from 'slate';
 import { ReactEditor, useSlateStatic } from 'slate-react';
+
 import { CodeTabsContext } from '../../context/CodeTabsContext';
 import { CodeLanguageSelect } from '../CodeLanguageSelect';
+
 import classes from './style.module.scss';
 
 interface Props {
@@ -49,14 +52,12 @@ export const CodeBlock = forwardRef<HTMLDivElement, Props>(
     };
 
     return (
-      <Component style={{ position: 'relative' }} value={id}>
+      <Component ref={ref} style={{ position: 'relative' }} value={id}>
         <CodeLanguageSelect
           value={element.lang || 'text'}
           onChange={setLanguage}
         />
-        <pre {...props}>
-          {children}
-        </pre>
+        <pre {...props}>{children}</pre>
       </Component>
     );
   },

@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { RenderElementProps } from 'slate-react';
+
 import { CodeBlock } from '../CodeBlock';
 import { CodeTabs } from '../CodeTabs';
 

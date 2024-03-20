@@ -89,8 +89,14 @@ Then run the app in production mode:
 yarn start
 ```
 
-## Problems I ran into with different WYSIWYG packages:
+## Learning
+
+### Problems I ran into with different WYSIWYG packages:
 
 1. `MDXEditor`: Nested editors are buggy when it comes to updates. Especially code blocks don't work well.
 2. `TipTap`: `ReactNodeViewRenderer` will create portals that are not probably nested. That means that context does not work. Also screws with component frameworks that all use Context.
 3. `Plate`: plugin system is quite cumbersome to setup and the data type names did not match with `Slate` which broke the transformer.
+
+### Biome
+
+I tried to give [Biome](https://biomejs.dev/) a chance since I like linters that also format the code but it just didn't feel quite right while using it. It was quite easy to setup but the VSCode integration stopped working after an update. I switched back to ESLint and Stylelint with the Prettier integration for formating.

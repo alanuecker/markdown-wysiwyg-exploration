@@ -1,25 +1,25 @@
 import type { Post } from '@prisma/client';
-
+import { h } from 'hastscript';
+import type { Root } from 'mdast';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePresetMinify from 'rehype-preset-minify';
 import rehypeSlug from 'rehype-slug';
 import remarkDirective from 'remark-directive';
 import remarkGfm from 'remark-gfm';
 import markdown from 'remark-parse';
-import { remarkToSlate, slateToRemark } from 'remark-slate-transformer';
 import stringify from 'remark-stringify';
+import { Descendant } from 'slate';
 import { unified } from 'unified';
+import { visit } from 'unist-util-visit';
+
+import { remarkToSlate, slateToRemark } from 'remark-slate-transformer';
+
 import { prisma } from '../utils/db.server';
 import { bundleMDX } from '../utils/mdx.server';
 
-import { h } from 'hastscript';
-import type { Root } from 'mdast';
-import { Descendant } from 'slate';
-import { visit } from 'unist-util-visit';
-
 function myRemarkPlugin() {
   return (tree: Root) => {
-    visit(tree, (node) => {
+    visit(tree, node => {
       if (
         node.type === 'containerDirective' ||
         node.type === 'leafDirective' ||
@@ -43,7 +43,7 @@ function parseRemarkCodeLineToSlate(entry) {
       ...entry,
       children: entry.children[0].text
         .split('\n')
-        .map((line) => ({ type: 'code-line', children: [{ text: line }] })),
+        .map(line => ({ type: 'code-line', children: [{ text: line }] })),
     };
   }
 
@@ -62,7 +62,7 @@ export async function getPost({ id }: Pick<Post, 'id'>) {
 
   const { code } = await bundleMDX({
     source: post?.content || '',
-    mdxOptions(options, frontmatter) {
+    mdxOptions(options) {
       options.remarkPlugins = [
         ...(options.remarkPlugins ?? []),
         remarkGfm,
@@ -109,10 +109,10 @@ function parseSlateCodeLineToRemark(entry: Descendant) {
     const { type, children, ...rest } = entry;
 
     const text = children
-      .map((line) => {
+      .map(line => {
         console.log(line);
         if (line.type === 'code-line') {
-          return line.children?.map((child) => child.text);
+          return line.children?.map(child => child.text);
         }
         if (line.text) {
           return line.text;

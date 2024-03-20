@@ -3,7 +3,9 @@ import React from 'react';
 import classNames from 'classnames';
 import { BaseEditor, Editor, Element as SlateElement, Transforms } from 'slate';
 import { useSlate } from 'slate-react';
+
 import { LIST_TYPES, TEXT_ALIGN_TYPES } from '../Editor';
+
 import classes from './style.module.scss';
 
 const isBlockActive = (
@@ -17,7 +19,7 @@ const isBlockActive = (
   const [match] = Array.from(
     Editor.nodes(editor, {
       at: Editor.unhangRange(editor, selection),
-      match: (n) =>
+      match: n =>
         !Editor.isEditor(n) &&
         SlateElement.isElement(n) &&
         n[blockType] === format,
@@ -36,7 +38,7 @@ const toggleBlock = (editor: BaseEditor, format: string) => {
   const isList = LIST_TYPES.includes(format);
 
   Transforms.unwrapNodes(editor, {
-    match: (n) =>
+    match: n =>
       !Editor.isEditor(n) &&
       SlateElement.isElement(n) &&
       LIST_TYPES.includes(n.type) &&
@@ -83,7 +85,7 @@ export function EditorBlockButton({
           TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type',
         ),
       })}
-      onMouseDown={(event) => {
+      onMouseDown={event => {
         event.preventDefault();
         toggleBlock(editor, format);
       }}

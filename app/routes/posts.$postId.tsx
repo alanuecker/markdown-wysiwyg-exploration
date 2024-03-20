@@ -1,5 +1,6 @@
 import { useMemo, useRef } from 'react';
 
+import { Button } from '@radix-ui/themes';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -72,12 +73,10 @@ export default function Index() {
                   event.preventDefault();
                 }}
               >
-                <button type="submit">Save</button>
+                <Button type="submit">Save</Button>
               </Form>{' '}
               <Form
                 onSubmit={event => {
-                  console.log('save', editorRef?.current);
-
                   submit(
                     {
                       content: JSON.stringify(''),
@@ -87,7 +86,7 @@ export default function Index() {
                   event.preventDefault();
                 }}
               >
-                <button type="submit">Clear</button>
+                <Button type="submit">Clear</Button>
               </Form>
               <Editor ref={editorRef} initialValue={data.note.slateData} />
             </div>

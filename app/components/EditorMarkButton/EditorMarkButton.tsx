@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Button } from '@radix-ui/themes';
 import classNames from 'classnames';
 import { BaseEditor, Editor } from 'slate';
 import { useSlate } from 'slate-react';
@@ -33,7 +34,7 @@ export function EditorMarkButton({
   const editor = useSlate();
 
   return (
-    <button
+    <Button
       type="button"
       className={classNames({ [classes.active]: isMarkActive(editor, format) })}
       onMouseDown={event => {
@@ -42,6 +43,6 @@ export function EditorMarkButton({
       }}
     >
       {children}
-    </button>
+    </Button>
   );
 }

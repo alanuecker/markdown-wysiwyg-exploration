@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 
+import { Button } from '@radix-ui/themes';
 import type { ActionFunctionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { Form, useActionData } from '@remix-run/react';
@@ -89,7 +90,7 @@ export default function NewNotePage() {
       </div>
 
       <div>
-        <button type="submit">Save</button>
+        <Button type="submit">Save</Button>
       </div>
     </Form>
   );

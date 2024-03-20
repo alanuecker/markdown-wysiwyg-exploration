@@ -26,8 +26,6 @@ export const CodeTabs = forwardRef<HTMLDivElement, Props>(
       const id = uuidv4().slice(0, 8);
       setTabs(val => [...val, { id: id, lang: defaultLanguage }]);
 
-      console.log('asign', defaultLanguage, id);
-
       return id;
     }
 

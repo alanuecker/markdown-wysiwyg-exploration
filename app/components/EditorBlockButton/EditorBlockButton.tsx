@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Button } from '@radix-ui/themes';
 import classNames from 'classnames';
 import { BaseEditor, Editor, Element as SlateElement, Transforms } from 'slate';
 import { useSlate } from 'slate-react';
@@ -76,7 +77,7 @@ export function EditorBlockButton({
   const editor = useSlate();
 
   return (
-    <button
+    <Button
       type="button"
       className={classNames({
         [classes.active]: isBlockActive(
@@ -91,6 +92,6 @@ export function EditorBlockButton({
       }}
     >
       {children}
-    </button>
+    </Button>
   );
 }

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Select } from '@radix-ui/themes';
+
 import classes from './style.module.scss';
 
 interface Props {
@@ -13,23 +15,26 @@ export function CodeLanguageSelect({
   ...props
 }: Props): React.JSX.Element {
   return (
-    <select
+    <Select.Root
       {...props}
       value={value}
       contentEditable={false}
       onChange={e => onChange(e.target.value)}
     >
-      <option value="css">CSS</option>
-      <option value="html">HTML</option>
-      <option value="java">Java</option>
-      <option value="javascript">JavaScript</option>
-      <option value="jsx">JSX</option>
-      <option value="markdown">Markdown</option>
-      <option value="php">PHP</option>
-      <option value="python">Python</option>
-      <option value="sql">SQL</option>
-      <option value="tsx">TSX</option>
-      <option value="typescript">TypeScript</option>
-    </select>
+      <Select.Trigger />
+      <Select.Content>
+        <Select.Item value="css">CSS</Select.Item>
+        <Select.Item value="html">HTML</Select.Item>
+        <Select.Item value="java">Java</Select.Item>
+        <Select.Item value="javascript">JavaScript</Select.Item>
+        <Select.Item value="jsx">JSX</Select.Item>
+        <Select.Item value="markdown">Markdown</Select.Item>
+        <Select.Item value="php">PHP</Select.Item>
+        <Select.Item value="python">Python</Select.Item>
+        <Select.Item value="sql">SQL</Select.Item>
+        <Select.Item value="tsx">TSX</Select.Item>
+        <Select.Item value="typescript">TypeScript</Select.Item>
+      </Select.Content>
+    </Select.Root>
   );
 }

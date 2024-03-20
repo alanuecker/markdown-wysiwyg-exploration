@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Button } from '@radix-ui/themes';
 import { Element as SlateElement, Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
 
@@ -23,7 +24,7 @@ export function ToolbarCodeBlockButton(): React.JSX.Element {
   };
 
   return (
-    <button
+    <Button
       type="button"
       onMouseDown={event => {
         event.preventDefault();
@@ -31,6 +32,6 @@ export function ToolbarCodeBlockButton(): React.JSX.Element {
       }}
     >
       Code
-    </button>
+    </Button>
   );
 }

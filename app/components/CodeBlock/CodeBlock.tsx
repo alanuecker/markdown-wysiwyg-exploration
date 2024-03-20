@@ -1,4 +1,4 @@
-import * as Tabs from '@radix-ui/react-tabs';
+import {Tabs} from '@radix-ui/themes';
 import React, {
   forwardRef,
   useContext,

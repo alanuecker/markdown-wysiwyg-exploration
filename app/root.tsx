@@ -1,3 +1,5 @@
+import { Theme } from '@radix-ui/themes';
+import '@radix-ui/themes/styles.css';
 import {
   Links,
   Meta,
@@ -6,7 +8,6 @@ import {
   ScrollRestoration,
 } from '@remix-run/react';
 import 'modern-normalize/modern-normalize.css';
-import './styles/water.light.scss';
 
 export default function App() {
   return (
@@ -18,7 +19,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <Theme>
+          <Outlet />
+        </Theme>
         <ScrollRestoration />
         <Scripts />
       </body>

@@ -1,4 +1,4 @@
-import * as Tabs from '@radix-ui/react-tabs';
+import {Tabs} from '@radix-ui/themes';
 import React, { forwardRef, useState } from 'react';
 import { BaseElement } from 'slate';
 import { v4 as uuidv4 } from 'uuid';
@@ -31,8 +31,6 @@ export const CodeTabs = forwardRef<HTMLDivElement, Props>(
     function removeCodeBlock(tabId: string): void {
       setTabs((val) => val.filter(({ id }) => id !== tabId));
     }
-
-    console.log(tabs);
 
     return (
       <Tabs.Root

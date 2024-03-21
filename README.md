@@ -99,4 +99,4 @@ yarn start
 
 ### Biome
 
-I tried to give [Biome](https://biomejs.dev/) a chance since I like linters that also format the code but it just didn't feel quite right while using it. It was quite easy to setup but the VSCode integration stopped working after an update. I switched back to ESLint and Stylelint with the Prettier integration for formatting.
+I tried to give [Biome](https://biomejs.dev/) a chance since I like linters that also format the code but it just didn't feel quite right while using it. It was quite easy to setup but the VSCode integration stopped working after an update. I switched back to ESLint with the Prettier integration for formatting.

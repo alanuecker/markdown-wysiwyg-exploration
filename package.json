@@ -7,7 +7,6 @@
     "setup": "prisma generate && prisma migrate deploy",
     "build": "remix vite:build",
     "dev": "remix vite:dev --manual",
-    "lint:css": "stylelint '**/*.scss'",
     "lint:ts": "eslint --ext .ts,.tsx .",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc"
@@ -42,7 +41,6 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.0.2",
     "@remix-run/dev": "^2.8.1",
-    "@stylelint/eslint-config": "^12.0.0",
     "@types/mdast": "^4.0.3",
     "@types/react": "^18.2.67",
     "@types/react-dom": "^18.2.22",
@@ -61,10 +59,6 @@
     "prisma": "^5.11.0",
     "sass": "^1.72.0",
     "shiki": "^1.2.0",
-    "stylelint": "^16.2.1",
-    "stylelint-a11y": "^1.2.3",
-    "stylelint-config-standard-scss": "^13.0.0",
-    "stylelint-prettier": "^5.0.0",
     "typescript": "^5.4.2",
     "vite": "^5.1.6",
     "vite-plugin-svgr": "^4.2.0"

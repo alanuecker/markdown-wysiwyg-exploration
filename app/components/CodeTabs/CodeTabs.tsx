@@ -1,7 +1,8 @@
 import React, { forwardRef, useState } from 'react';
 
 import { Tabs } from '@radix-ui/themes';
-import { BaseElement } from 'slate';
+import { BaseElement, Transforms } from 'slate';
+import { ReactEditor, useSlateStatic } from 'slate-react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { CodeTabsContext } from '../../context/CodeTabsContext';
@@ -19,7 +20,8 @@ interface Props {
 }
 
 export const CodeTabs = forwardRef<HTMLDivElement, Props>(
-  ({ children, ...props }, ref) => {
+  ({ element, children, ...props }, ref) => {
+    const editor = useSlateStatic();
     const [tabs, setTabs] = useState<Tab[]>([]);
 
     function addCodeBlock(defaultLanguage: string): string {
@@ -33,6 +35,29 @@ export const CodeTabs = forwardRef<HTMLDivElement, Props>(
       setTabs(val => val.filter(({ id }) => id !== tabId));
     }
 
+    function handleAddCodeBlock() {
+      const path = ReactEditor.findPath(editor, element);
+      Transforms.insertNodes(
+        editor,
+        {
+          type: 'code',
+          lang: 'javascript',
+          meta: null,
+          children: [
+            {
+              type: 'code-line',
+              children: [
+                {
+                  text: 'Type here...',
+                },
+              ],
+            },
+          ],
+        },
+        { at: [...path, element.children.length] },
+      );
+    }
+
     return (
       <Tabs.Root
         {...props}
@@ -42,15 +67,14 @@ export const CodeTabs = forwardRef<HTMLDivElement, Props>(
       >
         <Tabs.List className="TabsList" contentEditable={false}>
           {!!tabs.length &&
-            tabs.map(({ id, lang }) => (
-              <Tabs.Trigger
-                key={`${id}-${lang}`}
-                className="TabsTrigger"
-                value={id}
-              >
-                {`${id}-${lang}`}
+            tabs.map(({ id }) => (
+              <Tabs.Trigger key={id} className="TabsTrigger" value={id}>
+                {id}
               </Tabs.Trigger>
             ))}
+          <Tabs.Trigger onClick={handleAddCodeBlock} value="">
+            Add
+          </Tabs.Trigger>
         </Tabs.List>
         <CodeTabsContext.Provider value={{ addCodeBlock, removeCodeBlock }}>
           {children}

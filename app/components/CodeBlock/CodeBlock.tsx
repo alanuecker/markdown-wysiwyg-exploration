@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 
-import { Tabs } from '@radix-ui/themes';
+import { Button, Tabs } from '@radix-ui/themes';
 import { BaseElement, Transforms } from 'slate';
 import { ReactEditor, useSlateStatic } from 'slate-react';
 
@@ -51,12 +51,21 @@ export const CodeBlock = forwardRef<HTMLDivElement, Props>(
       Transforms.setNodes(editor, { lang }, { at: path });
     };
 
+    function handleDelete() {
+      const path = ReactEditor.findPath(editor, element);
+
+      Transforms.removeNodes(editor, { at: path });
+    }
+
     return (
       <Component ref={ref} style={{ position: 'relative' }} value={id}>
-        <CodeLanguageSelect
-          value={element.lang || 'text'}
-          onChange={setLanguage}
-        />
+        <div contentEditable={false}>
+          <CodeLanguageSelect
+            value={element.lang || 'text'}
+            onChange={setLanguage}
+          />
+          {id && <Button onClick={handleDelete}>Delete</Button>}
+        </div>
         <pre {...props}>{children}</pre>
       </Component>
     );

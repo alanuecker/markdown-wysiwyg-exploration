@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Heading, Text, Blockquote, Link, Table } from '@radix-ui/themes';
 import { RenderElementProps } from 'slate-react';
 
 import { CodeBlock } from '../CodeBlock';
@@ -14,21 +15,45 @@ export function Element({
 }: Props): React.JSX.Element {
   switch (element.type) {
     case 'paragraph':
-      return <p {...attributes}>{children}</p>;
+      return <Text {...attributes}>{children}</Text>;
     case 'heading': {
       switch (element.depth) {
         case 1:
-          return <h1 {...attributes}>{children}</h1>;
+          return (
+            <Heading {...attributes} size="9">
+              {children}
+            </Heading>
+          );
         case 2:
-          return <h2 {...attributes}>{children}</h2>;
+          return (
+            <Heading {...attributes} as="h2" size="8">
+              {children}
+            </Heading>
+          );
         case 3:
-          return <h3 {...attributes}>{children}</h3>;
+          return (
+            <Heading {...attributes} as="h3" size="7">
+              {children}
+            </Heading>
+          );
         case 4:
-          return <h4 {...attributes}>{children}</h4>;
+          return (
+            <Heading {...attributes} as="h4" size="6">
+              {children}
+            </Heading>
+          );
         case 5:
-          return <h5 {...attributes}>{children}</h5>;
+          return (
+            <Heading {...attributes} as="h5" size="5">
+              {children}
+            </Heading>
+          );
         case 6:
-          return <h6 {...attributes}>{children}</h6>;
+          return (
+            <Heading {...attributes} as="h6" size="4">
+              {children}
+            </Heading>
+          );
         default:
           break;
       }
@@ -37,7 +62,7 @@ export function Element({
     case 'thematicBreak':
       return <hr />;
     case 'blockquote':
-      return <blockquote {...attributes}>{children}</blockquote>;
+      return <Blockquote {...attributes}>{children}</Blockquote>;
     case 'list':
       if (element.ordered) {
         return <ol {...attributes}>{children}</ol>;
@@ -57,14 +82,14 @@ export function Element({
       );
     case 'table':
       return (
-        <table>
-          <tbody {...attributes}>{children}</tbody>
-        </table>
+        <Table.Root>
+          <Table.Body {...attributes}>{children}</Table.Body>
+        </Table.Root>
       );
     case 'tableRow':
-      return <tr {...attributes}>{children}</tr>;
+      return <Table.Row {...attributes}>{children}</Table.Row>;
     case 'tableCell':
-      return <td {...attributes}>{children}</td>;
+      return <Table.Cell {...attributes}>{children}</Table.Cell>;
     case 'code':
       return (
         <CodeBlock {...attributes} element={element}>
@@ -82,13 +107,13 @@ export function Element({
       return <br />;
     case 'link':
       return (
-        <a
+        <Link
           {...attributes}
           href={element.url as string}
           title={element.title as string}
         >
           {children}
-        </a>
+        </Link>
       );
     case 'image':
       return (

@@ -1,21 +1,22 @@
 import React from 'react';
 
+import { Code, Em, Strong } from '@radix-ui/themes';
 import { RenderLeafProps } from 'slate-react';
 
 interface Props extends RenderLeafProps {}
 
 export function Leaf({ attributes, children, leaf }: Props): React.JSX.Element {
   if (leaf.strong) {
-    children = <strong>{children}</strong>;
+    children = <Strong>{children}</Strong>;
   }
   if (leaf.emphasis) {
-    children = <em>{children}</em>;
+    children = <Em>{children}</Em>;
   }
   if (leaf.delete) {
     children = <del>{children}</del>;
   }
   if (leaf.inlineCode) {
-    children = <code>{children}</code>;
+    children = <Code>{children}</Code>;
   }
 
   const style = leaf.color ? { color: leaf.color } : undefined;

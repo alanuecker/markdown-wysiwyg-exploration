@@ -3,16 +3,16 @@ import React from 'react';
 import { Button } from '@radix-ui/themes';
 import classNames from 'classnames';
 import { BaseEditor, Editor } from 'slate';
-import { useSlate } from 'slate-react';
+import { useSlate, ReactEditor } from 'slate-react';
 
 import classes from './style.module.scss';
 
-const isMarkActive = (editor: BaseEditor, format: string) => {
+const isMarkActive = (editor: BaseEditor & ReactEditor, format: string) => {
   const marks = Editor.marks(editor);
   return marks ? marks[format] === true : false;
 };
 
-const toggleMark = (editor: BaseEditor, format: string) => {
+const toggleMark = (editor: BaseEditor & ReactEditor, format: string) => {
   const isActive = isMarkActive(editor, format);
 
   if (isActive) {

@@ -3,14 +3,14 @@ import React from 'react';
 import { Button } from '@radix-ui/themes';
 import classNames from 'classnames';
 import { BaseEditor, Editor, Element as SlateElement, Transforms } from 'slate';
-import { useSlate } from 'slate-react';
+import { useSlate, ReactEditor } from 'slate-react';
 
 import { LIST_TYPES, TEXT_ALIGN_TYPES } from '../Editor';
 
 import classes from './style.module.scss';
 
 const isBlockActive = (
-  editor: BaseEditor,
+  editor: BaseEditor & ReactEditor,
   format: string,
   blockType = 'type',
 ) => {
@@ -30,7 +30,7 @@ const isBlockActive = (
   return !!match;
 };
 
-const toggleBlock = (editor: BaseEditor, format: string) => {
+const toggleBlock = (editor: BaseEditor & ReactEditor, format: string) => {
   const isActive = isBlockActive(
     editor,
     format,

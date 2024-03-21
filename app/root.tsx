@@ -8,6 +8,7 @@ import {
   ScrollRestoration,
 } from '@remix-run/react';
 import 'modern-normalize/modern-normalize.css';
+import './styles/root.scss';
 
 export default function App() {
   return (

@@ -93,6 +93,7 @@ export default function Index() {
           )
         }
       </ClientOnly>
+      <hr />
       <Component />
     </>
   );

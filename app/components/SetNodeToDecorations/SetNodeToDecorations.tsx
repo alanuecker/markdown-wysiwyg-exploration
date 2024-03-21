@@ -9,7 +9,7 @@ import {
   NodeEntry,
   Range,
 } from 'slate';
-import { useSlate } from 'slate-react';
+import { ReactEditor, useSlate } from 'slate-react';
 
 export type CodeElement = {
   type: 'code';
@@ -42,7 +42,7 @@ const highlighter = await getHighlighter({
 
 // Use decorate to highlight the code blocks.
 export const useDecorate = (
-  editor: Editor,
+  editor: Editor & ReactEditor,
 ): (([node, path]: NodeEntry) => Range[]) => {
   return useCallback(
     ([node]) => {

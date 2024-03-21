@@ -46,8 +46,8 @@ This project relies on a fork of [remark-slate-transformer](https://github.com/a
 Install dependencies:
 
 ```sh
-yarn link remark-slate-transformer
 yarn
+yarn link remark-slate-transformer
 ```
 
 Install SQLite

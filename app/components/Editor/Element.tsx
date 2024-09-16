@@ -5,6 +5,7 @@ import { RenderElementProps } from 'slate-react';
 
 import { CodeBlock } from '../CodeBlock';
 import { CodeTabs } from '../CodeTabs';
+import type { CodeTabType } from '../CodeTabs';
 
 interface Props extends RenderElementProps {}
 
@@ -135,8 +136,15 @@ export function Element({
       break;
     case 'containerDirective':
       if (element.name === 'code-tabs') {
+        const tabs = element.children?.reduce<CodeTabType[]>(
+          (acc, { id, lang }) => {
+            return [...acc, { id, lang }];
+          },
+          [],
+        );
+
         return (
-          <CodeTabs {...attributes} element={element}>
+          <CodeTabs {...attributes} element={element} tabs={tabs}>
             {children}
           </CodeTabs>
         );

@@ -12,6 +12,7 @@ import stringify from 'remark-stringify';
 import { Descendant } from 'slate';
 import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
+import { v4 as uuidv4 } from 'uuid';
 
 import { prisma } from '../utils/db.server';
 import { bundleMDX } from '../utils/mdx.server';
@@ -39,6 +40,7 @@ function myRemarkPlugin() {
 function parseRemarkCodeLineToSlate(entry) {
   if (entry.type === 'code') {
     return {
+      id: uuidv4().slice(0, 8),
       ...entry,
       children: entry.children[0].text
         .split('\n')

@@ -74,7 +74,7 @@ export default function Index() {
                 }}
               >
                 <Button type="submit">Save</Button>
-              </Form>{' '}
+              </Form>
               <Form
                 onSubmit={event => {
                   submit(

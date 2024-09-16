@@ -19,7 +19,7 @@ export function CodeLanguageSelect({
       {...props}
       value={value}
       contentEditable={false}
-      onChange={e => onChange(e.target.value)}
+      onValueChange={lang => onChange(lang)}
     >
       <Select.Trigger />
       <Select.Content>

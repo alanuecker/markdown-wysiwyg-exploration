@@ -6,6 +6,8 @@ import { RenderLeafProps } from 'slate-react';
 interface Props extends RenderLeafProps {}
 
 export function Leaf({ attributes, children, leaf }: Props): React.JSX.Element {
+  const { text, ...rest } = leaf;
+
   if (leaf.strong) {
     children = <Strong>{children}</Strong>;
   }
@@ -20,8 +22,9 @@ export function Leaf({ attributes, children, leaf }: Props): React.JSX.Element {
   }
 
   const style = leaf.color ? { color: leaf.color } : undefined;
+  // note: join in className for PrismJS code highlighting
   return (
-    <span {...attributes} style={style}>
+    <span {...attributes} style={style} className={Object.keys(rest).join(' ')}>
       {children}
     </span>
   );

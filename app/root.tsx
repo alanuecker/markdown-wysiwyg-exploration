@@ -9,6 +9,7 @@ import {
 } from '@remix-run/react';
 import 'modern-normalize/modern-normalize.css';
 import './styles/root.scss';
+import 'prismjs/themes/prism-tomorrow.css';
 
 export default function App() {
   return (

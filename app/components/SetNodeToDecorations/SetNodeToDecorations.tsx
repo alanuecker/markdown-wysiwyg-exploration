@@ -1,6 +1,17 @@
 import { useCallback } from 'react';
 
-import { BundledLanguage, getHighlighter } from 'shiki';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-jsx';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-tsx';
+import 'prismjs/components/prism-markdown';
+import 'prismjs/components/prism-python';
+import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-markup';
+import 'prismjs/components/prism-css';
+import 'prismjs/components/prism-bash';
+
 import {
   Descendant,
   Editor,
@@ -9,7 +20,9 @@ import {
   NodeEntry,
   Range,
 } from 'slate';
-import { ReactEditor, useSlate } from 'slate-react';
+import { useSlate } from 'slate-react';
+
+import { normalizeTokens } from './normalizeTokens';
 
 export type CodeElement = {
   type: 'code';
@@ -28,26 +41,21 @@ const supportedLanguages = [
   'javascript',
   'typescript',
   'python',
-  'java',
   'html',
   'css',
   'markdown',
   'shell',
+  'html',
 ];
-
-const highlighter = await getHighlighter({
-  themes: ['github-light'],
-  langs: supportedLanguages,
-});
 
 // Use decorate to highlight the code blocks.
 export const useDecorate = (
-  editor: Editor & ReactEditor,
+  editor: Editor,
 ): (([node, path]: NodeEntry) => Range[]) => {
   return useCallback(
     ([node]) => {
       if (SlateElement.isElement(node) && node.type === 'code-line') {
-        const ranges = editor.nodeToDecorations?.get(node) || [];
+        const ranges = editor.nodeToDecorations.get(node) || [];
         return ranges;
       }
 
@@ -77,7 +85,7 @@ const getChildNodeToDecorations = ([
 
   const language = block.lang
     ? supportedLanguages.includes(block.lang)
-      ? (block.lang as BundledLanguage)
+      ? block.lang
       : 'text'
     : 'text';
 
@@ -86,18 +94,15 @@ const getChildNodeToDecorations = ([
   }
 
   const codeText = block.children.map(line => Node.string(line)).join('\n');
-  const themedTokens = highlighter.codeToTokens(codeText, {
-    lang: language,
-    theme: 'github-light',
-  });
 
+  const tokens = Prism.tokenize(codeText, Prism.languages['html']);
+  const normalizedTokens = normalizeTokens(tokens); // make tokens flat and grouped by line
   const blockChildren = block.children as SlateElement[];
 
-  const { tokens } = themedTokens;
-
-  for (let index = 0; index < tokens.length; index++) {
-    const lineTokens = tokens[index];
+  for (let index = 0; index < normalizedTokens.length; index++) {
+    const lineTokens = normalizedTokens[index];
     const element = blockChildren[index];
+
     if (!nodeToDecorations.has(element)) {
       nodeToDecorations.set(element, []);
     }
@@ -115,8 +120,10 @@ const getChildNodeToDecorations = ([
       const range = {
         anchor: { path, offset: start },
         focus: { path, offset: end },
-        color: token.color,
+        token: true,
+        ...Object.fromEntries(token.types.map(type => [type, true])),
       };
+
       nodeToDecorations.get(element)!.push(range);
 
       start = end;
@@ -136,9 +143,9 @@ export function SetNodeToDecorations() {
       mode: 'highest',
       match: n => SlateElement.isElement(n) && n.type === 'code',
     }),
-  ) as NodeEntry<CodeElement>[];
+  );
 
-  const nodeToDecorations: Map<SlateElement, Range[]> = mergeMaps(
+  const nodeToDecorations = mergeMaps(
     ...blockEntries.map(getChildNodeToDecorations),
   );
 

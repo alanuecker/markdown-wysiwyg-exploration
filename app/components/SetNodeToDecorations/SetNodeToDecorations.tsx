@@ -95,7 +95,7 @@ const getChildNodeToDecorations = ([
 
   const codeText = block.children.map(line => Node.string(line)).join('\n');
 
-  const tokens = Prism.tokenize(codeText, Prism.languages['html']);
+  const tokens = Prism.tokenize(codeText, Prism.languages[language]);
   const normalizedTokens = normalizeTokens(tokens); // make tokens flat and grouped by line
   const blockChildren = block.children as SlateElement[];
 

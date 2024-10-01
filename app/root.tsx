@@ -8,7 +8,7 @@ import {
   ScrollRestoration,
 } from '@remix-run/react';
 import 'modern-normalize/modern-normalize.css';
-import './styles/root.scss';
+import './styles/root.css';
 import 'prismjs/themes/prism-tomorrow.css';
 
 export default function App() {

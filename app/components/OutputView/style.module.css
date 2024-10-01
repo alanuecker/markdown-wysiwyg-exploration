@@ -1,0 +1,11 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+  }
+}

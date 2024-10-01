@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+
+  width: 14rem;
+
+  padding: 2rem;
+
+  border-right: 1px solid #000;
+}
+

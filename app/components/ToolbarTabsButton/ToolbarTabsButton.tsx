@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button } from '@radix-ui/themes';
+import { ToolbarButton } from '../ToolbarButton';
 import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
 
@@ -47,7 +47,7 @@ export function ToolbarTabsButton(): React.JSX.Element {
   };
 
   return (
-    <Button
+    <ToolbarButton
       type="button"
       onMouseDown={event => {
         event.preventDefault();
@@ -55,6 +55,6 @@ export function ToolbarTabsButton(): React.JSX.Element {
       }}
     >
       Tabs
-    </Button>
+    </ToolbarButton>
   );
 }

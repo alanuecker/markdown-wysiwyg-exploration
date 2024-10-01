@@ -7,8 +7,6 @@ import { ReactEditor, useSlateStatic } from 'slate-react';
 import { CodeTabsContext } from '../../context/CodeTabsContext';
 import { CodeLanguageSelect } from '../CodeLanguageSelect';
 
-import classes from './style.module.scss';
-
 interface Props {
   element: BaseElement;
   children: React.ReactNode;

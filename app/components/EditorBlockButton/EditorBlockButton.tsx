@@ -7,7 +7,7 @@ import { useSlate, ReactEditor } from 'slate-react';
 
 import { LIST_TYPES, TEXT_ALIGN_TYPES } from '../Editor';
 
-import classes from './style.module.scss';
+import classes from './style.module.css';
 
 const isBlockActive = (
   editor: BaseEditor & ReactEditor,

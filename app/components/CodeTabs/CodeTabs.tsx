@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { CodeTabsContext } from '../../context/CodeTabsContext';
 
-import classes from './style.module.scss';
+import classes from './style.module.css';
 
 export interface CodeTabType {
   id: string;

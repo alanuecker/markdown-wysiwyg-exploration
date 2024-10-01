@@ -1,16 +1,12 @@
-import { useMemo, useRef } from 'react';
-
-import { Button } from '@radix-ui/themes';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
 } from '@remix-run/node';
-import { Form, json, useLoaderData, useSubmit } from '@remix-run/react';
-import { getMDXComponent } from 'mdx-bundler/client/index.js';
-import { ClientOnly } from 'remix-utils/client-only';
+import { json, useLoaderData } from '@remix-run/react';
 
-import { Editor } from '../components/Editor';
+import { OutputView } from '../components/OutputView';
+import { EditorView } from '../components/EditorView';
 import { getPost, updatePost } from '../models/post.server';
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
@@ -46,55 +42,11 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const data = useLoaderData<typeof loader>();
-  const submit = useSubmit();
-  const editorRef = useRef<Node[]>(null);
-
-  const Component = useMemo(
-    () => getMDXComponent(data.note.code),
-    [data.note.code],
-  );
 
   return (
     <>
-      <ClientOnly fallback={<p>Loading...</p>}>
-        {() =>
-          data.note.id && (
-            <div>
-              <Form
-                onSubmit={event => {
-                  console.log('save', editorRef?.current);
-
-                  submit(
-                    {
-                      content: JSON.stringify(editorRef?.current || null),
-                    },
-                    { method: 'POST' },
-                  );
-                  event.preventDefault();
-                }}
-              >
-                <Button type="submit">Save</Button>
-              </Form>
-              <Form
-                onSubmit={event => {
-                  submit(
-                    {
-                      content: JSON.stringify(''),
-                    },
-                    { method: 'POST' },
-                  );
-                  event.preventDefault();
-                }}
-              >
-                <Button type="submit">Clear</Button>
-              </Form>
-              <Editor ref={editorRef} initialValue={data.note.slateData} />
-            </div>
-          )
-        }
-      </ClientOnly>
-      <hr />
-      <Component />
+      <EditorView data={data} />
+      <OutputView data={data} />
     </>
   );
 }

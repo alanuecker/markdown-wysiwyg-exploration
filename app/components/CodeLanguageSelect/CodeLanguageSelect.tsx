@@ -2,8 +2,6 @@ import React from 'react';
 
 import { Select } from '@radix-ui/themes';
 
-import classes from './style.module.scss';
-
 interface Props {
   value: string;
   onChange: (value: string) => void;
